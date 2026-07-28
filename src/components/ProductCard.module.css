@@ -1,0 +1,220 @@
+.card {
+  background-color: #FFF9E6;
+  border: 1px solid #D4AF37;
+  border-radius: 8px;
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08), 0 0 15px rgba(212, 175, 55, 0.2);
+  border-color: #B8860B;
+}
+
+.imageLink {
+  display: block;
+  text-decoration: none;
+  margin-bottom: 1.2rem;
+  width: 100%;
+}
+
+.imageBox {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background-color: #FFFFFF;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  border-radius: 6px;
+  overflow: hidden;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.card:hover .image {
+  transform: scale(1.05);
+}
+
+.discountBadge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #000;
+  color: #D4AF37;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  border: 1px solid #D4AF37;
+  z-index: 2;
+  letter-spacing: 0.5px;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex-grow: 1;
+  width: 100%;
+}
+
+.titleLink {
+  text-decoration: none;
+  color: inherit;
+  margin-bottom: 0.5rem;
+}
+
+.title {
+  font-family: var(--font-heading), Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #1F1F1F;
+  margin: 0;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 3.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.priceContainer {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.6rem;
+  margin: 0.4rem 0 0.8rem 0;
+}
+
+.originalPrice {
+  text-decoration: line-through;
+  color: #7A746E;
+  font-size: 0.9rem;
+}
+
+.currentPrice {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #5C564E;
+}
+
+.timerWrapper {
+  margin-bottom: 1.2rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.buttonGroup {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  width: 100%;
+  margin-top: auto;
+}
+
+.addToCartBtn, .buyNowBtn {
+  background-color: #000000;
+  color: #D4AF37;
+  border: 1px solid #D4AF37;
+  padding: 0.75rem 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: var(--font-body), sans-serif;
+  text-align: center;
+}
+
+.addToCartBtn:hover {
+  background-color: #1a1a1a;
+  color: #FFF;
+  border-color: #D4AF37;
+  box-shadow: 0 3px 10px rgba(212, 175, 55, 0.25);
+}
+
+.buyNowBtn {
+  background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+  color: #000000;
+  border-color: #B8860B;
+  font-weight: 800;
+}
+
+.buyNowBtn:hover {
+  background: linear-gradient(135deg, #FFE58F 0%, #D4AF37 100%);
+  color: #000000;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+  transform: translateY(-1px);
+}
+
+/* On mobile screens when displaying 2 columns side by side */
+@media (max-width: 768px) {
+  .card {
+    padding: 0.75rem;
+    border-radius: 6px;
+  }
+  
+  .imageLink {
+    margin-bottom: 0.8rem;
+  }
+  
+  .imageBox {
+    padding: 0;
+  }
+  
+  .title {
+    font-size: 0.95rem;
+    min-height: 2.6rem;
+    letter-spacing: 0.5px;
+  }
+  
+  .currentPrice {
+    font-size: 1rem;
+  }
+  
+  .originalPrice {
+    font-size: 0.8rem;
+  }
+  
+  .timerWrapper {
+    margin-bottom: 0.8rem;
+  }
+  
+  .buttonGroup {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  
+  .addToCartBtn, .buyNowBtn {
+    padding: 0.6rem 0.3rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.5px;
+  }
+}

@@ -1,0 +1,152 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: 95px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(1rem, 3vw, 4rem);
+  background: #000000;
+  border-bottom: 2px solid #D4AF37;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.9), 0 2px 15px rgba(212, 175, 55, 0.25);
+  color: #D4AF37;
+  transition: all 0.3s ease;
+}
+
+.scrolled {
+  height: 80px;
+  background: #000000;
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.95), 0 2px 20px rgba(212, 175, 55, 0.35);
+  border-bottom: 2px solid #D4AF37;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.logoImage {
+  width: 200px;
+  height: 75px;
+  object-fit: contain;
+  object-position: left center;
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.5));
+}
+
+.scrolled .logoImage {
+  width: 170px;
+  height: 60px;
+}
+
+.nav {
+  display: flex;
+  gap: clamp(1.5rem, 3vw, 3.5rem);
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.navLink {
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #D4AF37;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.navLink:hover {
+  color: #FFFFFF;
+  text-shadow: 0 0 12px rgba(212, 175, 55, 0.8);
+}
+
+.icons {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.cartBtn, .menuButton {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  color: #D4AF37;
+  background: rgba(212, 175, 55, 0.1);
+  border: 1.5px solid #D4AF37;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cartBtn:hover, .menuButton:hover {
+  background: #D4AF37;
+  color: #000000;
+  border-color: #D4AF37;
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+  transform: scale(1.05);
+}
+
+.cartBadge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #000000;
+  background: #D4AF37;
+  border: 2px solid #000000;
+  font-size: 11px;
+  font-weight: 900;
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.8);
+}
+
+.menuButton {
+  display: none;
+}
+
+@media (max-width: 850px) {
+  .header {
+    height: 80px;
+    padding: 0 1rem;
+  }
+  .logoImage {
+    width: 160px;
+    height: 55px;
+  }
+  .scrolled .logoImage {
+    width: 140px;
+    height: 50px;
+  }
+  .nav {
+    display: none;
+    position: fixed;
+    top: 80px;
+    left: 0;
+    right: 0;
+    transform: none;
+    background: #000000;
+    border-bottom: 2px solid #D4AF37;
+    padding: 2.5rem 1.5rem;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.95);
+    flex-direction: column;
+    gap: 1.8rem;
+    z-index: 999;
+  }
+  .menuOpen {
+    display: flex;
+  }
+  .menuButton {
+    display: grid;
+  }
+}

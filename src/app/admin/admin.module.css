@@ -1,0 +1,128 @@
+.adminLayout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f5f4f1;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #1f1f1f;
+  border-right: 0;
+  padding: 2rem 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebarLogo {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  color: #f0d29b;
+  padding: 0 2rem;
+  margin-bottom: 2rem;
+  letter-spacing: 2px;
+}
+
+.sidebarNav {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebarLink {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  color: #cbc7c0;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border-left: 3px solid transparent;
+}
+
+.sidebarLink:hover {
+  background-color: rgba(255,255,255,0.08);
+  color: var(--accent-gold);
+  border-left-color: var(--accent-gold);
+}
+
+.mainContent {
+  flex-grow: 1;
+  padding: 3rem clamp(1.5rem, 4vw, 4rem);
+  overflow-y: auto;
+}
+
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+  border-bottom: 1px solid #dedbd5;
+  padding-bottom: 1rem;
+}
+
+.pageTitle {
+  font-size: 2rem;
+  color: var(--text-primary);
+  font-family: var(--font-heading);
+}
+
+.primaryBtn {
+  background-color: #1f1f1f;
+  color: #fff;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.primaryBtn:hover {
+  background-color: var(--accent-gold);
+  transform: translateY(-2px);
+}
+
+.card {
+  background-color: var(--background-card);
+  border: 1px solid #e1ddd6;
+  border-radius: 0;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  text-align: left;
+  padding: 1rem;
+  color: var(--text-secondary);
+  border-bottom: 1px solid #e7e3dd;
+  font-weight: 500;
+}
+
+.table td {
+  padding: 1rem;
+  border-bottom: 1px solid #eeeae5;
+}
+
+.table tr:hover td {
+  background-color: #fbfaf8;
+}
+
+.actionBtn {
+  background: none;
+  border: 1px solid var(--border-gold);
+  color: var(--text-primary);
+  padding: 0.5rem 1rem;
+  border-radius: 0;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.actionBtn:hover {
+  background-color: var(--accent-gold);
+  color: #fff;
+}

@@ -1,0 +1,113 @@
+.container {
+  padding: 8rem 4rem 4rem 4rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+.title {
+  font-size: 3rem;
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.dashboardGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.card {
+  background-color: var(--background-card);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 2.5rem;
+}
+
+.cardTitle {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.linkBox {
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--border-gold);
+  padding: 1rem;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.copyBtn {
+  background-color: var(--accent-gold);
+  color: #000;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.copyBtn:hover {
+  background-color: var(--accent-gold-hover);
+}
+
+.statsCard {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.statBox {
+  background-color: var(--background-card);
+  border: 1px solid rgba(201, 168, 106, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.statBox h3 {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.statBox p {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--accent-gold);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+}
+
+.table th {
+  text-align: left;
+  padding: 1rem;
+  color: var(--text-secondary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-weight: 500;
+}
+
+.table td {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+}
+
+@media (max-width: 900px) {
+  .container {
+    padding: 6rem 2rem 3rem 2rem;
+  }
+  .dashboardGrid {
+    grid-template-columns: 1fr;
+  }
+}

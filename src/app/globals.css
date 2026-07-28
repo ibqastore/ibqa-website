@@ -1,0 +1,74 @@
+:root {
+  --background-primary: #FFFFFF;
+  --background-secondary: #FDFBF7;
+  --background-card: #FFF9E6;
+  --text-primary: #1F1F1F;
+  --text-secondary: #5C564E;
+  --accent-gold: #D4AF37;
+  --accent-gold-hover: #B8860B;
+  --border-gold: #D4AF37;
+  --button-bg: #000000;
+  --button-text: #D4AF37;
+  
+  --font-heading: var(--font-cormorant), Georgia, serif;
+  --font-body: var(--font-manrope), Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  background-color: var(--background-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  line-height: 1.6;
+}
+
+html { scroll-behavior: smooth; }
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 500;
+}
+
+button {
+  cursor: pointer;
+  font-family: var(--font-body);
+  border: none;
+}
+
+.gold-gradient-text {
+  background: linear-gradient(90deg, #C9A86A, #E4D098, #C9A86A);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Animations */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.8s ease-out forwards;
+}
