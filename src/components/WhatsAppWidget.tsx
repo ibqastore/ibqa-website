@@ -9,12 +9,23 @@ const WhatsAppIcon = ({ size = 32 }: { size?: number }) => (
   </svg>
 );
 
+import { useStore } from '@/context/StoreContext';
+
 export default function WhatsAppWidget() {
   const pathname = usePathname();
+  const { siteContent } = useStore();
+  
   if (pathname.startsWith('/admin')) return null;
-  const phoneNumber = "923391326074"; // 0339-1326074 without the 0 and with +92 country code
+  
+  // Convert standard phone format to WhatsApp format (e.g. 0339-1326074 -> 923391326074)
+  const rawPhone = siteContent.contactInfo?.phone || "0339-1326074";
+  let phoneDigits = rawPhone.replace(/\D/g, '');
+  if (phoneDigits.startsWith('0')) {
+    phoneDigits = '92' + phoneDigits.slice(1);
+  }
+  
   const message = encodeURIComponent("Hello, I would like to know more about IBQA Skincare products.");
-  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+  const whatsappUrl = `https://wa.me/${phoneDigits}?text=${message}`;
 
   return (
     <a 

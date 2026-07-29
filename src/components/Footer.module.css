@@ -12,6 +12,55 @@
   margin-bottom: 3rem;
 }
 
+.accordionBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-family: inherit;
+  cursor: default;
+  padding: 0;
+  width: 100%;
+}
+
+.accordionBtn h3 {
+  margin-bottom: 0 !important;
+}
+
+.accordionContent {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  animation: fadeDown 0.3s ease forwards;
+}
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.colCenter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.colRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.colRight input {
+  text-align: left;
+}
+
 .col h3 {
   color: var(--text-primary);
   margin-bottom: 1.5rem;
@@ -61,11 +110,14 @@
 
 .bottom {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  gap: 1.5rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding-top: 2rem;
   font-size: 0.8rem;
+  text-align: center;
 }
 
 .social {
@@ -94,6 +146,20 @@
   }
   .grid {
     grid-template-columns: 1fr;
+  }
+  .colCenter, .colRight {
+    align-items: flex-start;
+    text-align: left;
+  }
+  .accordionBtn {
+    justify-content: flex-start;
+    cursor: pointer;
+  }
+  .accordionContent {
+    display: none;
+  }
+  .accordionContent.open {
+    display: flex;
   }
   .bottom {
     flex-direction: column;

@@ -3,6 +3,7 @@ export interface ProductReview {
   rating: number; // 1-5
   text: string;
   avatar?: string;
+  videoUrl?: string;
 }
 
 export interface ProductFaq {
@@ -48,7 +49,7 @@ Gentle purifying cleanse infused with **pure rice water extracts** that removes 
 • **Instant Radiance Boost**: Promotes a clean, smooth, glass-skin complexion.`,
     price: 1500,
     originalPrice: 2000,
-    image: "/images/products/product-facewash.png",
+    image: "/images/products/product-facewash.webp",
     category: "Cleanser",
     ingredients: ["Rice Extract", "Glycerin", "Aqua (Water)", "Amino Acid Cleansers", "Panthenol"],
     howToUse: `1. Wet your face with lukewarm water to open pores.
@@ -85,7 +86,7 @@ High-strength brightening & pore-minimizing serum formulated for **radiant, even
 • **Barrier Strengthening**: Infused with Zinc PCA and Hyaluronic Acid for deep bounce and elasticity.`,
     price: 2500,
     originalPrice: 3200,
-    image: "/images/products/product-serum.png",
+    image: "/images/products/product-serum.webp",
     category: "Serum",
     ingredients: ["Niacinamide (Vitamin B3)", "Zinc PCA", "Hyaluronic Acid", "Organic Aloe Vera", "Allantoin"],
     howToUse: `1. Cleanse face thoroughly and pat slightly damp.
@@ -122,7 +123,7 @@ The ultimate **2-step glass skin routine** combining our best-selling Rice Extra
 • **Incredible Value**: Get both premium products together at a special discounted bundle price!`,
     price: 3500,
     originalPrice: 4500,
-    image: "/images/products/product-facewash-serum.png",
+    image: "/images/products/product-facewash-serum.webp",
     category: "Bundle",
     ingredients: ["Rice Extract", "Niacinamide (10%)", "Hyaluronic Acid", "Zinc PCA", "Glycerin"],
     buyMoreSaveMore: [

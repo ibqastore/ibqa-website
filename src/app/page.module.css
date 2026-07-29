@@ -11,7 +11,7 @@
 .promiseItem span { width:4px; height:4px; border-radius:50%; background:#fff; }
 .collection,.ingredients,.results,.faq { padding: clamp(5rem, 10vw, 9rem) clamp(1.5rem, 8vw, 8rem); }.sectionIntro { text-align:center; margin:0 auto 3.7rem; max-width:740px; }.sectionIntro h2 { color:var(--text-primary); font-size:clamp(3rem,5vw,5.2rem); }.sectionIntro>p:last-child { margin-top:1.25rem; color:var(--text-secondary); font-size:.86rem; }
 .productGrid { display:grid; grid-template-columns:repeat(3, 1fr); gap:2rem; max-width:1300px; margin:0 auto 2.6rem; align-items:stretch; padding:0 0.5rem; }
-.story { display:grid; grid-template-columns:1fr 1fr; background:var(--background-secondary); min-height:calc(100vh - 80px); max-height:800px; align-items:stretch; }
+.story { display:grid; grid-template-columns:1fr 1fr; background:var(--background-secondary); min-height:calc(100vh - 80px); align-items:stretch; }
 .storyImage { position:relative; height:100%; min-height:400px; }
 .storyImage img { object-fit:cover; }
 .storyContent { align-self:center; max-width:600px; padding:3rem clamp(2rem,5vw,5rem); }

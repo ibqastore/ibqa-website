@@ -44,23 +44,23 @@ export default function Home() {
 
     <section className={styles.promiseContainer}>
       <div className={styles.promiseTrack}>
-        {[1,2,3,4].map(i => (
+        {[1, 2, 3, 4].map(i => (
           <div key={i} className={styles.promiseItem}>
-            <p>{siteContent.announcement}</p><span/><p>Clean, considered skincare</p><span/><p>Luxury in every detail</p><span/>
+            <p>{siteContent.announcement}</p><span /><p>Clean, considered skincare</p><span /><p>Luxury in every detail</p><span />
           </div>
         ))}
       </div>
     </section>
 
     <section id="shop" className={styles.collection}>
-      <div className={styles.sectionIntro}><p className={styles.eyebrow}>The essentials</p><h2>Start with the <em>beautiful basics.</em></h2><p>Three gentle essentials. One effortless ritual.</p></div>
+      <div className={styles.sectionIntro}><p className={styles.eyebrow}>A Love Letter for Your Skin</p><h2>Dear Skin, <em>You Deserve Better.</em></h2><p>Meet IBQA  –  because your barrier finally found its Bestie.</p></div>
       <div className={styles.productGrid}>{products.map((product, index) => <ProductCard key={product.id} product={product} index={index} />)}</div>
       <div style={{ display: 'flex', justifyContent: 'center', width: '100%', marginTop: '3rem' }}>
-        <Link href="/shop" className={styles.outlineButton} style={{ padding: '1.2rem 2.5rem', fontSize: '0.85rem' }}>View all products <ArrowRight size={18}/></Link>
+        <Link href="/shop" className={styles.outlineButton} style={{ padding: '1.2rem 2.5rem', fontSize: '0.85rem' }}>View all products <ArrowRight size={18} /></Link>
       </div>
     </section>
 
-    <section id="our-story" className={styles.story}><div className={styles.storyContent}><p className={styles.eyebrow}>OUR STORY</p><h2>Every Beautiful Skin Begins With <em>Trust.</em></h2><p>IBQA was created with one simple belief: skincare should protect before it promises.<br/><br/>Inspired by Korean skincare philosophy, we craft gentle, effective formulas using carefully selected ingredients that nourish, strengthen, and care for your skin. No unnecessary complexity. No empty claims. Just skincare designed to become part of your everyday ritual.<br/><br/>Protection Before Perfection.<br/><br/>Because true confidence begins with healthy skin.</p></div><div className={styles.storyImage}><Image src={"/images/Our story/ibqa-story-v2.png"} alt="A calm, luxurious skincare ritual" fill /></div></section>
+    <section id="our-story" className={styles.story}><div className={styles.storyContent}><p className={styles.eyebrow}>OUR STORY</p><h2>Every Beautiful Skin Begins With <em>Trust.</em></h2><p>IBQA was created with one simple belief: skincare should protect before it promises.<br /><br />Inspired by Korean skincare philosophy, we craft gentle, effective formulas using carefully selected ingredients that nourish, strengthen, and care for your skin. No unnecessary complexity. No empty claims. Just skincare designed to become part of your everyday ritual.<br /><br />Protection Before Perfection.<br /><br />Because true confidence begins with healthy skin.</p></div><div className={styles.storyImage}><Image src={"/images/Our story/ibqa-story-v2.webp"} alt="A calm, luxurious skincare ritual" fill /></div></section>
 
     <section id="ingredients" className={styles.editorialIngredients}>
       <div className={`${styles.editorialIntro} ${styles.animateUp}`}>
@@ -71,7 +71,7 @@ export default function Home() {
       <div className={styles.editorialStack}>
         <article className={styles.editorialBlock}>
           <div className={`${styles.editorialImage} ${styles.animateUp}`}>
-            <Image src="/images/ingredients/rice.png" alt="Rice Extract" fill />
+            <Image src="/images/ingredients/rice.webp" alt="Rice Extract" fill />
           </div>
           <div className={`${styles.editorialContent} ${styles.animateUp}`}>
             <h3>Rice Extract</h3>
@@ -82,7 +82,7 @@ export default function Home() {
 
         <article className={`${styles.editorialBlock} ${styles.reverse}`}>
           <div className={`${styles.editorialImage} ${styles.animateUp}`}>
-            <Image src="/images/ingredients/niacinamide.jpeg" alt="Niacinamide" fill />
+            <Image src="/images/ingredients/niacinamide.webp" alt="Niacinamide" fill />
           </div>
           <div className={`${styles.editorialContent} ${styles.animateUp}`}>
             <h3>Niacinamide</h3>
@@ -93,7 +93,7 @@ export default function Home() {
 
         <article className={styles.editorialBlock}>
           <div className={`${styles.editorialImage} ${styles.animateUp}`}>
-            <Image src="/images/ingredients/hyaluronic.png" alt="Hyaluronic Acid" fill />
+            <Image src="/images/ingredients/hyaluronic.webp" alt="Hyaluronic Acid" fill />
           </div>
           <div className={`${styles.editorialContent} ${styles.animateUp}`}>
             <h3>Hyaluronic Acid</h3>
@@ -107,33 +107,33 @@ export default function Home() {
         <p className={styles.eyebrow}>Why These Ingredients Work Together</p>
         <div className={styles.synergyFlow}>
           <span>Rice Extract</span>
-          <ArrowDown size={16}/>
+          <ArrowDown size={16} />
           <em>Soothes</em>
-          <ArrowDown size={16}/>
+          <ArrowDown size={16} />
           <span>Niacinamide</span>
-          <ArrowDown size={16}/>
+          <ArrowDown size={16} />
           <em>Brightens</em>
-          <ArrowDown size={16}/>
+          <ArrowDown size={16} />
           <span>Hyaluronic Acid</span>
-          <ArrowDown size={16}/>
+          <ArrowDown size={16} />
           <em>Deep Hydration</em>
-          <ArrowDown size={16}/>
+          <ArrowDown size={16} />
           <strong>Healthy Glow</strong>
         </div>
       </div>
 
       <div className={`${styles.trustGrid} ${styles.animateUp}`}>
-        <div><Check size={24}/><span>Sulfate Free</span></div>
-        <div><Check size={24}/><span>Paraben Free</span></div>
-        <div><Heart size={24}/><span>Cruelty Free</span></div>
-        <div><ShieldCheck size={24}/><span>Dermatologically Tested</span></div>
-        <div><Droplet size={24}/><span>pH Balanced</span></div>
+        <div><Check size={24} /><span>Sulfate Free</span></div>
+        <div><Check size={24} /><span>Paraben Free</span></div>
+        <div><Heart size={24} /><span>Cruelty Free</span></div>
+        <div><ShieldCheck size={24} /><span>Dermatologically Tested</span></div>
+        <div><Droplet size={24} /><span>pH Balanced</span></div>
       </div>
     </section>
 
-    <section id="results" className={styles.results}><div className={styles.sectionIntro}><p className={styles.eyebrow}>Your glow, revealed</p><h2>Real moments. <em>Beautiful results.</em></h2></div><BeforeAfterSlider beforeImage={siteContent.beforeImage || "/images/before-after/before.PNG"} afterImage={siteContent.afterImage || "/images/before-after/after.PNG"} /></section>
+    <section id="results" className={styles.results}><div className={styles.sectionIntro}><p className={styles.eyebrow}>Your glow, revealed</p><h2>Real moments. <em>Beautiful results.</em></h2></div><BeforeAfterSlider beforeImage={siteContent.beforeImage || "/images/before-after/before.webp"} afterImage={siteContent.afterImage || "/images/before-after/after.webp"} /></section>
 
-    <section className={styles.reviews}><p className={styles.eyebrow}>Loved in the ritual</p><div className={styles.reviewsContainer}><div className={styles.reviewGrid}>{[...reviews, ...reviews].map(([quote, name], i) => <blockquote key={i}><div>{[1,2,3,4,5].map(star => <Star key={star} size={13} fill="currentColor" />)}</div><p>“{quote}”</p><cite>{name}</cite></blockquote>)}</div></div></section>
+    <section className={styles.reviews}><p className={styles.eyebrow}>Loved in the ritual</p><div className={styles.reviewsContainer}><div className={styles.reviewGrid}>{[...reviews, ...reviews].map(([quote, name], i) => <blockquote key={i}><div>{[1, 2, 3, 4, 5].map(star => <Star key={star} size={13} fill="currentColor" />)}</div><p>“{quote}”</p><cite>{name}</cite></blockquote>)}</div></div></section>
 
     <section id="faq" className={styles.faq}><div><p className={styles.eyebrow}>Need to know</p><h2>Questions, <em>answered simply.</em></h2></div><div className={styles.faqList}><details open><summary>Are IBQA products suitable for daily use?</summary><p>Our core routine is designed to fit easily into a consistent morning and evening skincare ritual.</p></details><details><summary>How do I use the Brightening Duo?</summary><p>Cleanse first with the Rice Extract Face Wash, then apply two to three drops of the Niacinamide Serum.</p></details><details><summary>How long does delivery take?</summary><p>Orders are confirmed before dispatch. Delivery timings depend on your city and courier coverage.</p></details></div></section>
   </div>;

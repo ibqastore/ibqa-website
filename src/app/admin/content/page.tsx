@@ -6,15 +6,39 @@ import { Upload, Image as ImageIcon, Leaf, Plus, Trash2 } from "lucide-react";
 import styles from "../admin.module.css";
 
 export default function ContentPage() {
-  const { siteContent, setSiteContent } = useStore();
+  const { siteContent, setSiteContent: originalSetSiteContent } = useStore();
   const [quickUploadResult, setQuickUploadResult] = useState<string | null>(null);
+  const [hasWarned, setHasWarned] = useState(false);
 
-  const handleFileUpload = (file: File, callback: (dataUrl: string) => void) => {
+  const setSiteContent = (newContent: any) => {
+    if (!hasWarned) {
+      if (!confirm("Warning: Changing this content will directly affect the live website. Do you want to proceed?")) {
+        return;
+      }
+      setHasWarned(true);
+    }
+    originalSetSiteContent(newContent);
+  };
+
+  const handleFileUpload = async (file: File, callback: (dataUrl: string) => void) => {
     if (!file.type.startsWith("image/")) return alert("Please select a valid image file.");
-    if (file.size > 2_500_000) return alert("Please use an image smaller than 2.5 MB for browser demo storage.");
-    const reader = new FileReader();
-    reader.onload = () => callback(String(reader.result));
-    reader.readAsDataURL(file);
+    
+    try {
+      const imageCompression = (await import('browser-image-compression')).default;
+      const options = {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true
+      };
+      
+      const compressedFile = await imageCompression(file, options);
+      const reader = new FileReader();
+      reader.onload = () => callback(String(reader.result));
+      reader.readAsDataURL(compressedFile);
+    } catch (error) {
+      console.error("Compression error:", error);
+      alert("Failed to compress image.");
+    }
   };
 
   const updateSlide = (index: number, field: keyof HeroSlide, value: string) => {
@@ -28,8 +52,8 @@ export default function ContentPage() {
   const addSlide = () => {
     const newSlide: HeroSlide = {
       id: `slide-${Date.now()}`,
-      pc: "/images/hero/facewash-hero-pc.PNG",
-      mobile: "/images/hero/facewash-hero-mobile.PNG",
+      pc: "/images/hero/facewash-hero-pc.webp",
+      mobile: "/images/hero/facewash-hero-mobile.webp",
       title: "New Banner"
     };
     setSiteContent({ ...siteContent, heroSlides: [...(siteContent.heroSlides || []), newSlide] });
@@ -44,11 +68,28 @@ export default function ContentPage() {
   return (
     <div className="animate-fade-up">
       <div className={styles.pageHeader}>
-        <div>
-          <h1 className={styles.pageTitle}>Website Media & Content Manager</h1>
-          <p style={{ color: "var(--text-secondary)", marginTop: ".4rem" }}>
-            Upload pictures for anywhere on your website (Hero Banners, Story, Before/After) and manage announcement copy.
-          </p>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+          <div>
+            <h1 className={styles.pageTitle}>Website Media & Content Manager</h1>
+            <p style={{ color: "var(--text-secondary)", marginTop: ".4rem" }}>
+              Upload pictures for anywhere on your website (Hero Banners, Story, Before/After) and manage announcement copy.
+            </p>
+          </div>
+          <button 
+            onClick={() => alert("Changes saved successfully!")}
+            style={{ 
+              background: "var(--accent-gold)", 
+              color: "#000", 
+              padding: "0.8rem 1.5rem", 
+              borderRadius: "4px", 
+              fontWeight: 700, 
+              border: "none", 
+              cursor: "pointer",
+              boxShadow: "0 4px 12px rgba(212,175,55,0.3)"
+            }}
+          >
+            Save Changes
+          </button>
         </div>
       </div>
 
@@ -252,7 +293,7 @@ export default function ContentPage() {
           <div style={{ padding: "1rem", background: "#fcfaf6", border: "1px solid #e8e2d8", borderRadius: "6px" }}>
             <label style={{ display: "block", fontWeight: 700, marginBottom: "0.5rem", color: "#1f1f1f" }}>🌿 Our Story Section Image</label>
             <div style={{ display: "flex", gap: "0.8rem", alignItems: "center", marginBottom: "0.5rem" }}>
-              <img src={siteContent.storyImage || "/images/Lifestyle/luxury-bathroom.PNG"} alt="Story" style={{ width: "60px", height: "60px", objectFit: "cover", borderRadius: "4px" }} />
+              <img src={siteContent.storyImage || "/images/Lifestyle/luxury-bathroom.webp"} alt="Story" style={{ width: "60px", height: "60px", objectFit: "cover", borderRadius: "4px" }} />
               <input 
                 type="text" 
                 value={siteContent.storyImage || ""} 
@@ -278,7 +319,7 @@ export default function ContentPage() {
           <div style={{ padding: "1rem", background: "#fcfaf6", border: "1px solid #e8e2d8", borderRadius: "6px" }}>
             <label style={{ display: "block", fontWeight: 700, marginBottom: "0.5rem", color: "#1f1f1f" }}>🌿 Results Section (Before Picture)</label>
             <div style={{ display: "flex", gap: "0.8rem", alignItems: "center", marginBottom: "0.5rem" }}>
-              <img src={siteContent.beforeImage || "/images/before-after/before.PNG"} alt="Before" style={{ width: "60px", height: "60px", objectFit: "cover", borderRadius: "4px" }} />
+              <img src={siteContent.beforeImage || "/images/before-after/before.webp"} alt="Before" style={{ width: "60px", height: "60px", objectFit: "cover", borderRadius: "4px" }} />
               <input 
                 type="text" 
                 value={siteContent.beforeImage || ""} 
@@ -304,7 +345,7 @@ export default function ContentPage() {
           <div style={{ padding: "1rem", background: "#fcfaf6", border: "1px solid #e8e2d8", borderRadius: "6px", gridColumn: "span 2" }}>
             <label style={{ display: "block", fontWeight: 700, marginBottom: "0.5rem", color: "#1f1f1f" }}>🌿 Results Section (After Picture)</label>
             <div style={{ display: "flex", gap: "0.8rem", alignItems: "center", marginBottom: "0.5rem" }}>
-              <img src={siteContent.afterImage || "/images/before-after/after.PNG"} alt="After" style={{ width: "60px", height: "60px", objectFit: "cover", borderRadius: "4px" }} />
+              <img src={siteContent.afterImage || "/images/before-after/after.webp"} alt="After" style={{ width: "60px", height: "60px", objectFit: "cover", borderRadius: "4px" }} />
               <input 
                 type="text" 
                 value={siteContent.afterImage || ""} 
@@ -325,6 +366,43 @@ export default function ContentPage() {
               />
             </label>
           </div>
+        </div>
+      </div>
+
+      {/* CONTACT INFO SETTINGS */}
+      <div className={styles.card} style={{ marginBottom: "2rem", borderLeft: "4px solid var(--accent-gold)" }}>
+        <h2 style={{ fontSize: "1.4rem", marginBottom: "1.5rem", color: "var(--text-primary)" }}>Store Contact Information</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem", marginBottom: "1.5rem" }}>
+          <label>
+            <span style={{ display: "block", fontSize: "0.9rem", fontWeight: 600, color: "var(--text-secondary)", marginBottom: "0.4rem" }}>Phone Number / WhatsApp</span>
+            <input
+              type="text"
+              value={siteContent.contactInfo?.phone || ""}
+              onChange={(e) => setSiteContent({ ...siteContent, contactInfo: { ...siteContent.contactInfo, phone: e.target.value } })}
+              placeholder="e.g. 0339-1326074"
+              style={{ width: "100%", padding: "0.8rem", background: "#fff", border: "1px solid #ddd", color: "#1f1f1f" }}
+            />
+          </label>
+          <label>
+            <span style={{ display: "block", fontSize: "0.9rem", fontWeight: 600, color: "var(--text-secondary)", marginBottom: "0.4rem" }}>Email Address</span>
+            <input
+              type="email"
+              value={siteContent.contactInfo?.email || ""}
+              onChange={(e) => setSiteContent({ ...siteContent, contactInfo: { ...siteContent.contactInfo, email: e.target.value } })}
+              placeholder="e.g. teamibqa@gmail.com"
+              style={{ width: "100%", padding: "0.8rem", background: "#fff", border: "1px solid #ddd", color: "#1f1f1f" }}
+            />
+          </label>
+          <label style={{ gridColumn: "span 2" }}>
+            <span style={{ display: "block", fontSize: "0.9rem", fontWeight: 600, color: "var(--text-secondary)", marginBottom: "0.4rem" }}>Store Address</span>
+            <input
+              type="text"
+              value={siteContent.contactInfo?.address || ""}
+              onChange={(e) => setSiteContent({ ...siteContent, contactInfo: { ...siteContent.contactInfo, address: e.target.value } })}
+              placeholder="e.g. Shop#2, fawad plaza, hakimabad, nowshera"
+              style={{ width: "100%", padding: "0.8rem", background: "#fff", border: "1px solid #ddd", color: "#1f1f1f" }}
+            />
+          </label>
         </div>
       </div>
     </div>

@@ -6,7 +6,7 @@ import { Product } from "@/data/products";
 import RichText from "@/components/RichText";
 import styles from "./product.module.css";
 import { useRouter } from "next/navigation";
-import { ChevronDown, ChevronUp, ShieldCheck, Truck, Users, Lock, Star, ChevronLeft, ChevronRight, Check } from "lucide-react";
+import { ChevronDown, ChevronUp, ShieldCheck, Truck, FlaskConical, Lock, Star, ChevronLeft, ChevronRight, Check } from "lucide-react";
 
 const INGREDIENT_GLOSSARY: Record<string, string> = {
   "Rice Extract": "Rich in amino acids and antioxidants; naturally brightens and softens rough skin.",
@@ -208,7 +208,7 @@ export default function ProductDetailClient({
           <div className={styles.trustIcons}>
             <div className={styles.trustIcon}><ShieldCheck size={22} /><span>7 Days Warranty</span></div>
             <div className={styles.trustIcon}><Truck size={22} /><span>Free Shipping</span></div>
-            <div className={styles.trustIcon}><Users size={22} /><span>1M+ Customers</span></div>
+            <div className={styles.trustIcon}><FlaskConical size={22} /><span>Dermatologically tested</span></div>
             <div className={styles.trustIcon}><Lock size={22} /><span>Secure Checkout</span></div>
           </div>
         </div>
@@ -299,7 +299,7 @@ export default function ProductDetailClient({
       {/* ====== REVIEWS SECTION ====== */}
       {product.reviews && product.reviews.length > 0 && (
         <div className={styles.reviewsSection}>
-          <h2 className={styles.sectionHeading}>REVIEWS SECTION</h2>
+          <h2 className={styles.sectionHeading}>Reviews</h2>
           <div className={styles.reviewsScroll}>
             {product.reviews.map((review, idx) => (
               <div key={idx} className={styles.reviewCard}>
@@ -310,6 +310,27 @@ export default function ProductDetailClient({
                     <StarRating rating={review.rating} />
                   </div>
                 </div>
+                {review.videoUrl && (
+                  <div style={{ marginBottom: '10px' }}>
+                    {(review.videoUrl.includes("youtube.com") || review.videoUrl.includes("youtu.be")) ? (
+                      <iframe 
+                        width="100%" 
+                        height="200" 
+                        src={`https://www.youtube.com/embed/${review.videoUrl.includes('v=') ? review.videoUrl.split('v=')[1].split('&')[0] : review.videoUrl.split('.be/')[1].split('?')[0]}`} 
+                        title="YouTube video player" 
+                        frameBorder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowFullScreen 
+                        style={{ borderRadius: '8px', marginBottom: '10px' }}
+                      />
+                    ) : (
+                      <video width="100%" height="200" controls style={{ borderRadius: '8px', objectFit: 'cover' }}>
+                        <source src={review.videoUrl} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    )}
+                  </div>
+                )}
                 <p style={{ fontSize: "0.88rem", color: "#444", lineHeight: 1.6, margin: 0 }}>{review.text}</p>
               </div>
             ))}

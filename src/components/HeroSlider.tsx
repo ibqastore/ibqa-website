@@ -11,9 +11,9 @@ export default function HeroSlider() {
   const slides = (siteContent.heroSlides && siteContent.heroSlides.length > 0)
     ? siteContent.heroSlides
     : [
-        { id: "slide-1", pc: "/images/hero/facewash-hero-pc.PNG", mobile: "/images/hero/facewash-hero-mobile.PNG", title: "Rice Extract Face Wash" },
-        { id: "slide-2", pc: "/images/hero/serum-facewash-pc.PNG", mobile: "/images/hero/facewash-serum-hero-mobile.PNG", title: "Brightening Duo" },
-        { id: "slide-3", pc: "/images/hero/serum-hero-pc.PNG", mobile: "/images/hero/serum-hero-mobile.PNG", title: "Niacinamide Serum" }
+        { id: "slide-1", pc: "/images/hero/facewash-hero-pc.webp", mobile: "/images/hero/facewash-hero-mobile.webp", title: "Rice Extract Face Wash" },
+        { id: "slide-2", pc: "/images/hero/serum-facewash-pc.webp", mobile: "/images/hero/facewash-serum-hero-mobile.webp", title: "Brightening Duo" },
+        { id: "slide-3", pc: "/images/hero/serum-hero-pc.webp", mobile: "/images/hero/serum-hero-mobile.webp", title: "Niacinamide Serum" }
       ];
 
   useEffect(() => {

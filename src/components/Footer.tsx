@@ -1,8 +1,10 @@
 "use client";
 
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import { useStore } from '@/context/StoreContext';
 import styles from './Footer.module.css';
 
 const Instagram = ({ size = 20 }: { size?: number }) => (
@@ -27,7 +29,22 @@ const TikTok = ({ size = 20 }: { size?: number }) => (
 
 export default function Footer() {
   const pathname = usePathname();
+  const { addSubscriber } = useStore();
+  const [email, setEmail] = useState("");
+  const [subscribed, setSubscribed] = useState(false);
+  const [openQuickLinks, setOpenQuickLinks] = useState(false);
+  const [openLegal, setOpenLegal] = useState(false);
+
   if (pathname.startsWith('/admin')) return null;
+
+  const handleSubscribe = () => {
+    if (email && email.includes("@")) {
+      addSubscriber(email);
+      setSubscribed(true);
+      setEmail("");
+      setTimeout(() => setSubscribed(false), 3000);
+    }
+  };
   return (
     <footer className={styles.footer}>
       <div className={styles.grid}>
@@ -36,11 +53,11 @@ export default function Footer() {
         <div className={styles.col}>
           <div style={{ margin: '-0.5rem 0 1rem 0', display: 'flex', alignItems: 'flex-start' }}>
             <Image
-              src="/images/logo/logo-main.PNG"
+              src="/images/logo/logo-main.webp"
               alt="IBQA Logo"
-              width={100}
-              height={100}
-              style={{ width: '80px', height: 'auto', objectFit: 'contain', objectPosition: 'left top', filter: 'drop-shadow(0 0 8px rgba(212, 175, 55, 0.4))' }}
+              width={80}
+              height={80}
+              style={{ width: '60px', height: 'auto', objectFit: 'contain', objectPosition: 'left top', filter: 'drop-shadow(0 0 8px rgba(212, 175, 55, 0.4))' }}
             />
           </div>
           <h3>About IBQA</h3>
@@ -52,18 +69,43 @@ export default function Footer() {
 
         {/* CENTRE: Quick Links */}
         <div className={`${styles.col} ${styles.colCenter}`}>
-          <h3>Quick Links</h3>
-          <Link href="/#shop">Shop</Link>
-          <Link href="/#our-story">Our Story</Link>
-          <Link href="/#ingredients">Ingredients</Link>
+          <button className={styles.accordionBtn} onClick={() => setOpenQuickLinks(!openQuickLinks)}>
+            <h3>Quick Links</h3>
+          </button>
+          <div className={`${styles.accordionContent} ${openQuickLinks ? styles.open : ''}`}>
+            <Link href="/#shop">Shop</Link>
+            <Link href="/#our-story">Our Story</Link>
+            <Link href="/#ingredients">Ingredients</Link>
+          </div>
+        </div>
+
+        {/* POLICIES */}
+        <div className={`${styles.col} ${styles.colCenter}`}>
+          <button className={styles.accordionBtn} onClick={() => setOpenLegal(!openLegal)}>
+            <h3>Legal</h3>
+          </button>
+          <div className={`${styles.accordionContent} ${openLegal ? styles.open : ''}`}>
+            <Link href="/policies/refund">Refund Policy</Link>
+            <Link href="/policies/shipping">Shipping Policy</Link>
+              <Link href="/policies/privacy">Privacy Policy</Link>
+              <Link href="/policies/terms">Terms of Service</Link>
+            </div>
         </div>
 
         {/* RIGHT: Newsletter */}
-        <div className={styles.col}>
+        <div className={`${styles.col} ${styles.colRight}`}>
           <h3>Newsletter</h3>
           <p>Join IBQA Community for exclusive offers.</p>
-          <input type="email" placeholder="Your email address" className={styles.newsletterInput} />
-          <button className={styles.newsletterBtn}>Subscribe</button>
+          <input 
+            type="email" 
+            placeholder="Your email address" 
+            className={styles.newsletterInput} 
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <button className={styles.newsletterBtn} onClick={handleSubscribe}>
+            {subscribed ? "Subscribed!" : "Subscribe"}
+          </button>
         </div>
 
       </div>
@@ -73,7 +115,7 @@ export default function Footer() {
         <p>&copy; {new Date().getFullYear()} IBQA Skincare. All rights reserved.</p>
         <div className={styles.social}>
           <a href="https://www.instagram.com/ibqaskincare?igsh=MXR0a2NzcXV0Zmd5eA==" aria-label="Instagram"><Instagram size={20} /></a>
-          <a href="#" aria-label="Facebook"><Facebook size={20} /></a>
+          <a href="https://www.facebook.com/share/1DQ1Agyra4/?mibextid=wwXIfr" aria-label="Facebook"><Facebook size={20} /></a>
           <a href="https://www.tiktok.com/@ibqaskincare?_r=1&_t=ZS-98PyFCUArED" aria-label="TikTok"><TikTok size={20} /></a>
         </div>
       </div>

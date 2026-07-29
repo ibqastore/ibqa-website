@@ -17,8 +17,8 @@ export default function AdminProducts() {
     originalPrice: 0,
     category: "",
     description: "",
-    image: "/images/products/product-facewash.png",
-    images: ["/images/products/product-facewash.png"],
+    image: "/images/products/product-facewash.webp",
+    images: ["/images/products/product-facewash.webp"],
     ingredients: [],
     howToUse: "",
     descriptionImages: [],
@@ -54,7 +54,7 @@ export default function AdminProducts() {
     
     setIsAdding(false);
     setEditingId(null);
-    setFormData({ name: "", price: 0, originalPrice: 0, category: "", description: "", image: "/images/products/product-facewash.png", images: ["/images/products/product-facewash.png"], ingredients: [], howToUse: "", descriptionImages: [], reviews: [], faqs: [], buyMoreSaveMore: [{ qty: 1, discountPercent: 0, label: "Standard Price" }, { qty: 2, discountPercent: 10, label: "Most Popular" }, { qty: 3, discountPercent: 20 }] });
+    setFormData({ name: "", price: 0, originalPrice: 0, category: "", description: "", image: "/images/products/product-facewash.webp", images: ["/images/products/product-facewash.webp"], ingredients: [], howToUse: "", descriptionImages: [], reviews: [], faqs: [], buyMoreSaveMore: [{ qty: 1, discountPercent: 0, label: "Standard Price" }, { qty: 2, discountPercent: 10, label: "Most Popular" }, { qty: 3, discountPercent: 20 }] });
   };
 
   const handleEdit = (product: Product) => {
@@ -69,20 +69,33 @@ export default function AdminProducts() {
     }
   };
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
     if (!file.type.startsWith("image/")) return alert("Please select an image file.");
-    if (file.size > 1_500_000) return alert("Please use an image smaller than 1.5 MB for browser storage.");
-    const reader = new FileReader();
-    reader.onload = () => {
-      setFormData((current) => {
-        const currentImages = current.images && current.images.length > 0 ? current.images : (current.image ? [current.image] : []);
-        const newImages = [...currentImages, String(reader.result)];
-        return { ...current, image: newImages[0] || "", images: newImages };
-      });
-    };
-    reader.readAsDataURL(file);
+    
+    try {
+      const imageCompression = (await import('browser-image-compression')).default;
+      const options = {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true
+      };
+      const compressedFile = await imageCompression(file, options);
+      
+      const reader = new FileReader();
+      reader.onload = () => {
+        setFormData((current) => {
+          const currentImages = current.images && current.images.length > 0 ? current.images : (current.image ? [current.image] : []);
+          const newImages = [...currentImages, String(reader.result)];
+          return { ...current, image: newImages[0] || "", images: newImages };
+        });
+      };
+      reader.readAsDataURL(compressedFile);
+    } catch (error) {
+      console.error("Compression error:", error);
+      alert("Failed to compress image.");
+    }
   };
 
   const handleRemoveImage = (index: number) => {
@@ -102,7 +115,7 @@ export default function AdminProducts() {
           onClick={() => {
             setIsAdding(true);
             setEditingId(null);
-            setFormData({ name: "", price: 0, originalPrice: 0, category: "", description: "", image: "/images/products/product-facewash.png", images: ["/images/products/product-facewash.png"], ingredients: [], howToUse: "", descriptionImages: [], reviews: [], faqs: [], buyMoreSaveMore: [{ qty: 1, discountPercent: 0, label: "Standard Price" }, { qty: 2, discountPercent: 10, label: "Most Popular" }, { qty: 3, discountPercent: 20 }] });
+            setFormData({ name: "", price: 0, originalPrice: 0, category: "", description: "", image: "/images/products/product-facewash.webp", images: ["/images/products/product-facewash.webp"], ingredients: [], howToUse: "", descriptionImages: [], reviews: [], faqs: [], buyMoreSaveMore: [{ qty: 1, discountPercent: 0, label: "Standard Price" }, { qty: 2, discountPercent: 10, label: "Most Popular" }, { qty: 3, discountPercent: 20 }] });
           }}
         >
           Add New Product
@@ -241,13 +254,19 @@ export default function AdminProducts() {
                 <label style={{ width: '90px', height: '90px', border: '2px dashed #D4AF37', borderRadius: '6px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#D4AF37', fontSize: '0.75rem', gap: '4px' }}>
                   <span style={{ fontSize: '1.5rem' }}>+</span>
                   <span>Add Image</span>
-                  <input type="file" accept="image/*" style={{ display: 'none' }} onChange={(e) => {
+                  <input type="file" accept="image/*" style={{ display: 'none' }} onChange={async (e) => {
                     const file = e.target.files?.[0];
                     if (!file) return;
-                    if (file.size > 2_000_000) return alert("Please use an image under 2MB.");
-                    const reader = new FileReader();
-                    reader.onload = () => setFormData(prev => ({ ...prev, descriptionImages: [...(prev.descriptionImages || []), String(reader.result)] }));
-                    reader.readAsDataURL(file);
+                    try {
+                      const imageCompression = (await import('browser-image-compression')).default;
+                      const compressedFile = await imageCompression(file, { maxSizeMB: 1, maxWidthOrHeight: 1200, useWebWorker: true });
+                      const reader = new FileReader();
+                      reader.onload = () => setFormData(prev => ({ ...prev, descriptionImages: [...(prev.descriptionImages || []), String(reader.result)] }));
+                      reader.readAsDataURL(compressedFile);
+                    } catch (error) {
+                      console.error("Compression error:", error);
+                      alert("Failed to compress description image.");
+                    }
                   }} />
                 </label>
               )}
@@ -263,14 +282,35 @@ export default function AdminProducts() {
             </div>
             <div style={{ display: 'grid', gap: '1rem' }}>
               {(formData.reviews || []).map((review, idx) => (
-                <div key={idx} style={{ padding: '0.8rem', background: '#fff', border: '1px solid #ddd', borderRadius: '6px', display: 'grid', gridTemplateColumns: '1fr 80px auto', gap: '8px', alignItems: 'center' }}>
+                <div key={idx} style={{ padding: '0.8rem', background: '#fff', border: '1px solid #ddd', borderRadius: '6px', display: 'grid', gridTemplateColumns: '1fr 140px auto', gap: '8px', alignItems: 'start' }}>
                   <div style={{ display: 'grid', gap: '4px' }}>
                     <input type="text" placeholder="Reviewer Name" value={review.author} onChange={e => { const r = [...(formData.reviews || [])]; r[idx] = { ...r[idx], author: e.target.value }; setFormData(prev => ({ ...prev, reviews: r })); }} style={{ width: '100%', padding: '0.5rem', border: '1px solid #ddd', fontSize: '0.85rem' }} />
                     <textarea placeholder="Review text..." value={review.text} onChange={e => { const r = [...(formData.reviews || [])]; r[idx] = { ...r[idx], text: e.target.value }; setFormData(prev => ({ ...prev, reviews: r })); }} style={{ width: '100%', padding: '0.5rem', border: '1px solid #ddd', fontSize: '0.85rem', minHeight: '50px', resize: 'vertical' }} />
+                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                      <input type="text" placeholder="Video URL (e.g. uploaded video or YouTube link)" value={review.videoUrl || ""} onChange={e => { const r = [...(formData.reviews || [])]; r[idx] = { ...r[idx], videoUrl: e.target.value }; setFormData(prev => ({ ...prev, reviews: r })); }} style={{ flexGrow: 1, padding: '0.5rem', border: '1px dashed #D4AF37', fontSize: '0.85rem', background: '#FFFDF5' }} />
+                      <label style={{ background: '#111', color: '#D4AF37', padding: '0.4rem 0.8rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                        Upload Video
+                        <input type="file" accept="video/mp4,video/webm" style={{ display: 'none' }} onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            if (file.size > 10_000_000) return alert("Please keep videos under 10MB for this demo.");
+                            const reader = new FileReader();
+                            reader.onload = () => {
+                              const r = [...(formData.reviews || [])];
+                              r[idx] = { ...r[idx], videoUrl: String(reader.result) };
+                              setFormData(prev => ({ ...prev, reviews: r }));
+                            };
+                            reader.readAsDataURL(file);
+                          }
+                        }} />
+                      </label>
+                    </div>
                   </div>
-                  <select value={review.rating} onChange={e => { const r = [...(formData.reviews || [])]; r[idx] = { ...r[idx], rating: Number(e.target.value) }; setFormData(prev => ({ ...prev, reviews: r })); }} style={{ padding: '0.5rem', border: '1px solid #ddd' }}>
-                    {[5,4,3,2,1].map(n => <option key={n} value={n}>{n} stars</option>)}
-                  </select>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <select value={review.rating} onChange={e => { const r = [...(formData.reviews || [])]; r[idx] = { ...r[idx], rating: Number(e.target.value) }; setFormData(prev => ({ ...prev, reviews: r })); }} style={{ padding: '0.5rem', border: '1px solid #ddd', width: '100%' }}>
+                      {[5,4,3,2,1].map(n => <option key={n} value={n}>{n} stars</option>)}
+                    </select>
+                  </div>
                   <button type="button" onClick={() => setFormData(prev => ({ ...prev, reviews: (prev.reviews || []).filter((_, i) => i !== idx) }))} style={{ padding: '0.4rem 0.7rem', background: '#ff4d4d', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem' }}>✕</button>
                 </div>
               ))}

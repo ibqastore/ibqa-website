@@ -1,10 +1,7 @@
 .container {
-  padding: 8rem 4rem 4rem 4rem;
-  max-width: 1200px;
+  padding: 8rem 2rem 4rem 2rem;
+  max-width: 800px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1.5fr 1fr;
-  gap: 4rem;
 }
 
 .title {

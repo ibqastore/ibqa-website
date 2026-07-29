@@ -42,7 +42,7 @@ export default function Header() {
       <header className={`${styles.header} ${isScrolled ? styles.scrolled : ''}`}>
         <Link href="/" className={styles.logo}>
           <Image
-            src="/images/logo/logo-main.PNG"
+            src="/images/logo/logo-main.webp"
             alt="IBQA Skincare Logo"
             width={500}
             height={500}

@@ -36,6 +36,7 @@ export default function AdminDashboard() {
         <Link className={styles.primaryBtn} href="/admin/products">Manage products</Link>
         <Link className={styles.actionBtn} href="/admin/orders">Manage orders</Link>
         <Link className={styles.actionBtn} href="/admin/content">Edit website content</Link>
+        <Link className={styles.actionBtn} href="/admin/subscribers">Manage subscribers</Link>
       </div>
     </div>
   );
