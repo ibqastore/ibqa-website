@@ -21,6 +21,10 @@
   border-bottom: 2px solid #D4AF37;
 }
 
+.hidden {
+  transform: translateY(-100%);
+}
+
 .logo {
   display: flex;
   align-items: center;

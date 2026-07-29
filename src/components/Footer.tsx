@@ -51,7 +51,7 @@ export default function Footer() {
 
         {/* LEFT: Logo + About */}
         <div className={styles.col}>
-          <div style={{ margin: '-0.5rem 0 1rem 0', display: 'flex', alignItems: 'flex-start' }}>
+          <Link href="/" style={{ margin: '-0.5rem 0 1rem 0', display: 'flex', alignItems: 'flex-start', cursor: 'pointer', textDecoration: 'none' }}>
             <Image
               src="/images/logo/logo-main.webp"
               alt="IBQA Logo"
@@ -59,7 +59,7 @@ export default function Footer() {
               height={80}
               style={{ width: '60px', height: 'auto', objectFit: 'contain', objectPosition: 'left top', filter: 'drop-shadow(0 0 8px rgba(212, 175, 55, 0.4))' }}
             />
-          </div>
+          </Link>
           <h3>About IBQA</h3>
           <p>
             Premium skincare made for healthier, radiant skin.
