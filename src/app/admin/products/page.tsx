@@ -83,18 +83,22 @@ export default function AdminProducts() {
       };
       const compressedFile = await imageCompression(file, options);
       
-      const reader = new FileReader();
-      reader.onload = () => {
-        setFormData((current) => {
-          const currentImages = current.images && current.images.length > 0 ? current.images : (current.image ? [current.image] : []);
-          const newImages = [...currentImages, String(reader.result)];
-          return { ...current, image: newImages[0] || "", images: newImages };
-        });
-      };
-      reader.readAsDataURL(compressedFile);
+      const response = await fetch(`/api/upload?filename=${encodeURIComponent(compressedFile.name || 'product.webp')}`, {
+        method: 'POST',
+        body: compressedFile,
+      });
+
+      if (!response.ok) throw new Error('Failed to upload file');
+      const newBlob = await response.json();
+      
+      setFormData((current) => {
+        const currentImages = current.images && current.images.length > 0 ? current.images : (current.image ? [current.image] : []);
+        const newImages = [...currentImages, newBlob.url];
+        return { ...current, image: newImages[0] || "", images: newImages };
+      });
     } catch (error) {
-      console.error("Compression error:", error);
-      alert("Failed to compress image.");
+      console.error("Upload error:", error);
+      alert("Failed to compress and upload image.");
     }
   };
 
@@ -260,12 +264,15 @@ export default function AdminProducts() {
                     try {
                       const imageCompression = (await import('browser-image-compression')).default;
                       const compressedFile = await imageCompression(file, { maxSizeMB: 1, maxWidthOrHeight: 1200, useWebWorker: true });
-                      const reader = new FileReader();
-                      reader.onload = () => setFormData(prev => ({ ...prev, descriptionImages: [...(prev.descriptionImages || []), String(reader.result)] }));
-                      reader.readAsDataURL(compressedFile);
+                      
+                      const response = await fetch(`/api/upload?filename=${encodeURIComponent(compressedFile.name || 'desc.webp')}`, { method: 'POST', body: compressedFile });
+                      if (!response.ok) throw new Error('Failed to upload file');
+                      const newBlob = await response.json();
+                      
+                      setFormData(prev => ({ ...prev, descriptionImages: [...(prev.descriptionImages || []), newBlob.url] }));
                     } catch (error) {
-                      console.error("Compression error:", error);
-                      alert("Failed to compress description image.");
+                      console.error("Upload error:", error);
+                      alert("Failed to compress and upload description image.");
                     }
                   }} />
                 </label>
@@ -294,13 +301,20 @@ export default function AdminProducts() {
                           const file = e.target.files?.[0];
                           if (file) {
                             if (file.size > 10_000_000) return alert("Please keep videos under 10MB for this demo.");
-                            const reader = new FileReader();
-                            reader.onload = () => {
-                              const r = [...(formData.reviews || [])];
-                              r[idx] = { ...r[idx], videoUrl: String(reader.result) };
-                              setFormData(prev => ({ ...prev, reviews: r }));
+                            const uploadVideo = async () => {
+                              try {
+                                const response = await fetch(`/api/upload?filename=${encodeURIComponent(file.name || 'video.mp4')}`, { method: 'POST', body: file });
+                                if (!response.ok) throw new Error('Failed to upload video');
+                                const newBlob = await response.json();
+                                const r = [...(formData.reviews || [])];
+                                r[idx] = { ...r[idx], videoUrl: newBlob.url };
+                                setFormData(prev => ({ ...prev, reviews: r }));
+                              } catch(e) {
+                                console.error(e);
+                                alert("Failed to upload video.");
+                              }
                             };
-                            reader.readAsDataURL(file);
+                            uploadVideo();
                           }
                         }} />
                       </label>

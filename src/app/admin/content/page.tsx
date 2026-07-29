@@ -32,12 +32,21 @@ export default function ContentPage() {
       };
       
       const compressedFile = await imageCompression(file, options);
-      const reader = new FileReader();
-      reader.onload = () => callback(String(reader.result));
-      reader.readAsDataURL(compressedFile);
+      
+      const response = await fetch(`/api/upload?filename=${encodeURIComponent(compressedFile.name || 'image.webp')}`, {
+        method: 'POST',
+        body: compressedFile,
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to upload file');
+      }
+
+      const newBlob = await response.json();
+      callback(newBlob.url);
     } catch (error) {
-      console.error("Compression error:", error);
-      alert("Failed to compress image.");
+      console.error("Upload error:", error);
+      alert("Failed to compress and upload image.");
     }
   };
 
