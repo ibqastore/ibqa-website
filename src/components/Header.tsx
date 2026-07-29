@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, ShoppingBag, X } from 'lucide-react';
+import { Menu, ShoppingBag, X, Search } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useStore } from '@/context/StoreContext';
 import CartDrawer from './CartDrawer';
@@ -21,8 +21,12 @@ export default function Header() {
   const [isHidden, setIsHidden] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const pathname = usePathname();
-  const { cart } = useStore();
+  const { cart, products } = useStore();
+  
+  const filteredProducts = searchQuery ? products.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()) || p.category.toLowerCase().includes(searchQuery.toLowerCase())) : [];
   const lastScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
 
   const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
@@ -50,6 +54,7 @@ export default function Header() {
 
   return (
     <>
+      <div style={{ height: '95px' }} aria-hidden="true" />
       <header className={`${styles.header} ${isScrolled ? styles.scrolled : ''} ${isHidden ? styles.hidden : ''}`}>
         <Link href="/" className={styles.logo}>
           <Image
@@ -77,6 +82,14 @@ export default function Header() {
 
         <div className={styles.icons}>
           <button
+            aria-label="Search"
+            className={styles.cartBtn}
+            onClick={() => setIsSearchOpen(true)}
+          >
+            <Search size={22} strokeWidth={2} />
+          </button>
+          
+          <button
             aria-label="Cart"
             className={styles.cartBtn}
             onClick={() => setIsCartOpen(true)}
@@ -97,6 +110,40 @@ export default function Header() {
 
       {/* CartDrawer is rendered outside <header> so fixed positioning is relative to viewport */}
       <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+
+      {isSearchOpen && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 9999, display: 'flex', flexDirection: 'column', padding: '2rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+            <h2 style={{ color: '#D4AF37', margin: 0 }}>Search Products</h2>
+            <button onClick={() => { setIsSearchOpen(false); setSearchQuery(""); }} style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer' }}><X size={32} /></button>
+          </div>
+          <input 
+            autoFocus
+            type="text" 
+            placeholder="Type to search..." 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{ width: '100%', padding: '1.2rem', fontSize: '1.2rem', background: '#222', color: '#fff', border: '1px solid #D4AF37', borderRadius: '8px', outline: 'none' }}
+          />
+          <div style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem', overflowY: 'auto' }}>
+            {searchQuery && filteredProducts.length === 0 && <p style={{ color: '#aaa' }}>No products found.</p>}
+            {filteredProducts.map(p => (
+              <Link 
+                key={p.id} 
+                href={`/shop/${p.id}`}
+                onClick={() => { setIsSearchOpen(false); setSearchQuery(""); }}
+                style={{ display: 'flex', alignItems: 'center', gap: '1rem', background: '#111', padding: '1rem', borderRadius: '8px', textDecoration: 'none', border: '1px solid #333' }}
+              >
+                <img src={p.image} alt={p.name} style={{ width: '60px', height: '60px', objectFit: 'contain', background: '#fff', borderRadius: '4px' }} />
+                <div>
+                  <h3 style={{ color: '#fff', fontSize: '1.1rem', margin: '0 0 0.3rem 0' }}>{p.name}</h3>
+                  <p style={{ color: '#D4AF37', margin: 0, fontWeight: 'bold' }}>Rs. {p.price}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </>
   );
 }
