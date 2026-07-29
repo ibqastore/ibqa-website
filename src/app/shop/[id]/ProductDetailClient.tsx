@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useStore } from "@/context/StoreContext";
 import { Product } from "@/data/products";
 import RichText from "@/components/RichText";
+import BeforeAfterSlider from "@/components/BeforeAfterSlider";
 import styles from "./product.module.css";
 import { useRouter } from "next/navigation";
 import { ChevronDown, ChevronUp, ShieldCheck, Truck, FlaskConical, Lock, Star, ChevronLeft, ChevronRight, Check } from "lucide-react";
@@ -337,6 +338,14 @@ export default function ProductDetailClient({
           </div>
         </div>
       )}
+
+      {/* ====== BEFORE / AFTER SECTION ====== */}
+      <div className={styles.faqSection} style={{ padding: '0', background: 'transparent' }}>
+        <BeforeAfterSlider 
+          beforeImage={siteContent.beforeImage || "/images/before-after/before.webp"} 
+          afterImage={siteContent.afterImage || "/images/before-after/after.webp"} 
+        />
+      </div>
 
       {/* ====== FAQ SECTION ====== */}
       {product.faqs && product.faqs.length > 0 && (
