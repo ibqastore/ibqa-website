@@ -53,7 +53,7 @@ export default function Home() {
     </section>
 
     <section id="shop" className={styles.collection}>
-      <div className={styles.sectionIntro}><p className={styles.eyebrow}>A Love Letter for Your Skin</p><h2>Dear Skin, <br className={styles.mobileBreak} /><em>You Deserve Better.</em></h2><p>Meet IBQA  –  because your barrier finally found its Bestie.</p></div>
+      <div className={styles.sectionIntro}><p className={styles.eyebrow}>A Love Letter for Your Skin</p><h2>Dear Skin, <span className={styles.mobileBreak}></span><em>You Deserve Better.</em></h2><p>Meet IBQA  –  because your barrier finally found its Bestie.</p></div>
       <div className={styles.productGrid}>{products.map((product, index) => <ProductCard key={product.id} product={product} index={index} />)}</div>
       <div style={{ display: 'flex', justifyContent: 'center', width: '100%', marginTop: '3rem' }}>
         <Link href="/shop" className={styles.outlineButton} style={{ padding: '1.2rem 2.5rem', fontSize: '0.85rem' }}>View all products <ArrowRight size={18} /></Link>
