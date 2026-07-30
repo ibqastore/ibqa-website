@@ -60,7 +60,7 @@ export default function Home() {
       </div>
     </section>
 
-    <section id="our-story" className={styles.story}><div className={styles.storyContent}><p className={styles.eyebrow}>OUR STORY</p><h2>Every Beautiful Skin Begins With <em>Trust.</em></h2><p>IBQA was created with one simple belief: skincare should protect before it promises.<br /><br />Inspired by Korean skincare philosophy, we craft gentle, effective formulas using carefully selected ingredients that nourish, strengthen, and care for your skin. No unnecessary complexity. No empty claims. Just skincare designed to become part of your everyday ritual.<br /><br />Protection Before Perfection.<br /><br />Because true confidence begins with healthy skin.</p></div><div className={styles.storyImage}><Image src={"/images/Our story/ibqa-story-v2.webp"} alt="A calm, luxurious skincare ritual" fill /></div></section>
+    <section id="our-story" className={styles.story}><div className={styles.storyContent}><p className={styles.eyebrow}>OUR STORY</p><h2>Every Beautiful Skin Begins With <em>Trust.</em></h2><p>IBQA was created with one simple belief: skincare should protect before it promises.<br /><br />Inspired by Korean skincare philosophy, we craft gentle, effective formulas using carefully selected ingredients that nourish, strengthen, and care for your skin. No unnecessary complexity. No empty claims. Just skincare designed to become part of your everyday ritual.<br /><br />Protection Before Perfection.<br /><br />Because true confidence begins with healthy skin.</p></div><div className={styles.storyImage}><Image src={"/images/Our story/ibqa-story-v2.webp"} alt="A calm, luxurious skincare ritual" fill sizes="(max-width: 800px) 100vw, 50vw" /></div></section>
 
     <section id="ingredients" className={styles.editorialIngredients}>
       <div className={`${styles.editorialIntro} ${styles.animateUp}`}>
@@ -71,7 +71,7 @@ export default function Home() {
       <div className={styles.editorialStack}>
         <article className={styles.editorialBlock}>
           <div className={`${styles.editorialImage} ${styles.animateUp}`}>
-            <Image src="/images/ingredients/rice.webp" alt="Rice Extract" fill />
+            <Image src="/images/ingredients/rice.webp" alt="Rice Extract" fill sizes="(max-width: 800px) 100vw, 33vw" />
           </div>
           <div className={`${styles.editorialContent} ${styles.animateUp}`}>
             <h3>Rice Extract</h3>
@@ -82,7 +82,7 @@ export default function Home() {
 
         <article className={`${styles.editorialBlock} ${styles.reverse}`}>
           <div className={`${styles.editorialImage} ${styles.animateUp}`}>
-            <Image src="/images/ingredients/niacinamide.webp" alt="Niacinamide" fill />
+            <Image src="/images/ingredients/niacinamide.webp" alt="Niacinamide" fill sizes="(max-width: 800px) 100vw, 33vw" />
           </div>
           <div className={`${styles.editorialContent} ${styles.animateUp}`}>
             <h3>Niacinamide</h3>
@@ -93,7 +93,7 @@ export default function Home() {
 
         <article className={styles.editorialBlock}>
           <div className={`${styles.editorialImage} ${styles.animateUp}`}>
-            <Image src="/images/ingredients/hyaluronic.webp" alt="Hyaluronic Acid" fill />
+            <Image src="/images/ingredients/hyaluronic.webp" alt="Hyaluronic Acid" fill sizes="(max-width: 800px) 100vw, 33vw" />
           </div>
           <div className={`${styles.editorialContent} ${styles.animateUp}`}>
             <h3>Hyaluronic Acid</h3>
