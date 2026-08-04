@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "../admin.module.css";
+import { createClient } from "@/utils/supabase/client";
 
 const TABS = ["All", "Pending", "Confirmed", "Processing", "Dispatched", "Delivered", "Cancelled"];
 
@@ -169,8 +170,6 @@ export default function AdminOrders() {
               </tbody>
             </table>
           )}
-            </tbody>
-          </table>
         </div>
         <p style={{ color: 'var(--text-secondary)', fontSize: '.75rem', marginTop: '1.5rem', textAlign: 'center' }}>
           This preview becomes a live order queue once checkout is connected to a database.
