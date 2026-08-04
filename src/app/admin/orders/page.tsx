@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import styles from "../admin.module.css";
 import { createClient } from "@/utils/supabase/client";
 
-const TABS = ["All", "Pending", "Confirmed", "Processing", "Dispatched", "Delivered", "Cancelled"];
+const TABS = ["All", "Pending", "Confirmed", "Processing", "Dispatched", "Delivered", "Completed", "Cancelled"];
 
 export default function AdminOrders() {
   const [orders, setOrders] = useState<any[]>([]);
@@ -49,15 +49,61 @@ export default function AdminOrders() {
     return `https://wa.me/${cleaned}`;
   };
 
+  const downloadCSV = () => {
+    if (filteredOrders.length === 0) {
+      alert("No orders to download.");
+      return;
+    }
+    
+    const headers = ["Order ID", "Date", "First Name", "Last Name", "Email", "Phone", "Country", "City", "Address", "Payment Method", "Status", "Subtotal", "Shipping", "Discount", "Total"];
+    
+    const rows = filteredOrders.map(order => {
+      const c = order.customer_info || {};
+      return [
+        order.id,
+        `"${new Date(order.created_at).toLocaleString()}"`,
+        `"${c.firstName || ''}"`,
+        `"${c.lastName || ''}"`,
+        `"${c.email || ''}"`,
+        `"${c.phone || ''}"`,
+        `"${c.country || ''}"`,
+        `"${c.city || ''}"`,
+        `"${(c.address || '')} ${(c.addressExtension || '')}"`,
+        order.payment_method,
+        order.status,
+        order.subtotal,
+        order.shipping,
+        order.discount,
+        order.total
+      ].join(",");
+    });
+    
+    const csvContent = [headers.join(","), ...rows].join("\n");
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `ibqa_orders_${activeTab.toLowerCase()}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="animate-fade-up">
-      <div className={styles.pageHeader}>
+      <div className={styles.pageHeader} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div>
           <h1 className={styles.pageTitle}>Orders</h1>
           <p style={{ color: 'var(--text-secondary)', marginTop: '.4rem' }}>
             Confirm, fulfil, dispatch, or cancel customer orders from one place.
           </p>
         </div>
+        <button 
+          onClick={downloadCSV}
+          style={{ background: '#111', color: '#D4AF37', padding: '0.6rem 1.2rem', borderRadius: '4px', fontWeight: 600, border: '1px solid #D4AF37', cursor: 'pointer' }}
+        >
+          Download Data (CSV)
+        </button>
       </div>
 
       <div className={styles.card}>
@@ -154,6 +200,7 @@ export default function AdminOrders() {
                             <option>Processing</option>
                             <option>Dispatched</option>
                             <option>Delivered</option>
+                            <option>Completed</option>
                             <option>Cancelled</option>
                           </select>
                         </td>
