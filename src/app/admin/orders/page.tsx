@@ -178,10 +178,18 @@ export default function AdminOrders() {
                             fontSize: '0.75rem', 
                             fontWeight: 600,
                             backgroundColor: 
+                              statusCapitalized === 'Pending' ? '#f3f4f6' : 
+                              statusCapitalized === 'Confirmed' ? '#e0f2fe' : 
+                              statusCapitalized === 'Processing' ? '#f3e8ff' : 
+                              statusCapitalized === 'Dispatched' ? '#fef3c7' : 
                               (statusCapitalized === 'Delivered' || statusCapitalized === 'Completed') ? '#dcfce7' : 
                               statusCapitalized === 'Cancelled' ? '#fee2e2' : 
                               '#f3f4f6',
                             color: 
+                              statusCapitalized === 'Pending' ? '#374151' : 
+                              statusCapitalized === 'Confirmed' ? '#0369a1' : 
+                              statusCapitalized === 'Processing' ? '#7e22ce' : 
+                              statusCapitalized === 'Dispatched' ? '#d97706' : 
                               (statusCapitalized === 'Delivered' || statusCapitalized === 'Completed') ? '#166534' : 
                               statusCapitalized === 'Cancelled' ? '#991b1b' : 
                               '#374151'
