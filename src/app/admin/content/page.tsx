@@ -383,7 +383,7 @@ export default function ContentPage() {
           <div style={{ padding: "1rem", background: "#fcfaf6", border: "1px solid #e8e2d8", borderRadius: "6px" }}>
             <label style={{ display: "block", fontWeight: 700, marginBottom: "0.5rem", color: "#1f1f1f" }}>🌿 Our Story Section Image</label>
             <div style={{ display: "flex", gap: "0.8rem", alignItems: "center", marginBottom: "0.5rem" }}>
-              <img src={siteContent.storyImage || "/images/Lifestyle/luxury-bathroom.webp"} alt="Story" style={{ width: "60px", height: "60px", objectFit: "cover", borderRadius: "4px" }} />
+              <img src={siteContent.storyImage || "/images/our-story/ibqa-story-v2.webp"} alt="Story" style={{ width: "60px", height: "60px", objectFit: "cover", borderRadius: "4px" }} />
               <input 
                 type="text" 
                 value={siteContent.storyImage || ""} 

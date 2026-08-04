@@ -160,7 +160,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       if (contentData && !contentError) {
         const data = contentData.data;
         // Fix legacy image path containing spaces which breaks on Vercel
-        if (data.storyImage === "/images/Our story/ibqa-story-v2.webp") {
+        if (!data.storyImage || data.storyImage === "/images/Our story/ibqa-story-v2.webp" || data.storyImage.includes("luxury-bathroom")) {
           data.storyImage = "/images/our-story/ibqa-story-v2.webp";
         }
         setSiteContent(data);
