@@ -79,7 +79,7 @@ export default function Home() {
     <section id="our-story" className={styles.story}>
       <div className={styles.storyContent}>
         <p className={styles.eyebrow}>OUR STORY</p>
-        <h2>{siteContent.ourStoryTitle ? <span dangerouslySetInnerHTML={{ __html: siteContent.ourStoryTitle.replace('Trust.', '<em>Trust.</em>') }} /> : "Every Beautiful Skin Begins With <em>Trust.</em>"}</h2>
+        <h2>{siteContent.ourStoryTitle ? <span dangerouslySetInnerHTML={{ __html: siteContent.ourStoryTitle.replace('Trust.', '<em>Trust.</em>') }} /> : <>Every Beautiful Skin Begins With <em>Trust.</em></>}</h2>
         <div>
           {(siteContent.ourStoryText || "IBQA was created with one simple belief: skincare should protect before it promises.\n\nInspired by Korean skincare philosophy, we craft gentle, effective formulas using carefully selected ingredients that nourish, strengthen, and care for your skin. No unnecessary complexity. No empty claims. Just skincare designed to become part of your everyday ritual.\n\nProtection Before Perfection.\n\nBecause true confidence begins with healthy skin.").split('\n').map((paragraph, i) => (
             <p key={i}>{paragraph}</p>
@@ -94,7 +94,7 @@ export default function Home() {
     <section id="ingredients" className={styles.editorialIngredients}>
       <div className={`${styles.editorialIntro} ${styles.animateUp}`}>
         <p className={styles.eyebrow}>{siteContent.ingredientsTitle || "The Science Behind Every Drop"}</p>
-        <h2>{siteContent.ingredientsSubtitle ? <span dangerouslySetInnerHTML={{ __html: siteContent.ingredientsSubtitle.replace('proven, gentle care', '<em>proven, gentle care</em>') }} /> : "Every ingredient is carefully selected for a reason—not because it's trending, but because your skin deserves <em>proven, gentle care</em> inspired by Korean skincare philosophy."}</h2>
+        <h2>{siteContent.ingredientsSubtitle ? <span dangerouslySetInnerHTML={{ __html: siteContent.ingredientsSubtitle.replace('proven, gentle care', '<em>proven, gentle care</em>') }} /> : <>Every ingredient is carefully selected for a reason—not because it's trending, but because your skin deserves <em>proven, gentle care</em> inspired by Korean skincare philosophy.</>}</h2>
       </div>
 
       <div className={styles.editorialStack}>
@@ -163,7 +163,7 @@ export default function Home() {
     <section id="results" className={styles.results}>
       <div className={styles.sectionIntro}>
         <p className={styles.eyebrow}>Your glow, revealed</p>
-        <h2>{siteContent.resultsTitle ? <span dangerouslySetInnerHTML={{ __html: siteContent.resultsTitle.replace('Real Results.', '<em>Real Results.</em>') }} /> : "Real People. <em>Real Results.</em>"}</h2>
+        <h2>{siteContent.resultsTitle ? <span dangerouslySetInnerHTML={{ __html: siteContent.resultsTitle.replace('Real Results.', '<em>Real Results.</em>') }} /> : <>Real People. <em>Real Results.</em></>}</h2>
       </div>
       <BeforeAfterSlider beforeImage={siteContent.beforeImage || "/images/before-after/before.webp"} afterImage={siteContent.afterImage || "/images/before-after/after.webp"} />
     </section>
