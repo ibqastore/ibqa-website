@@ -158,7 +158,12 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       // Fetch Site Content
       const { data: contentData, error: contentError } = await supabase.from('site_content').select('data').eq('id', 1).single();
       if (contentData && !contentError) {
-        setSiteContent(contentData.data);
+        const data = contentData.data;
+        // Fix legacy image path containing spaces which breaks on Vercel
+        if (data.storyImage === "/images/Our story/ibqa-story-v2.webp") {
+          data.storyImage = "/images/our-story/ibqa-story-v2.webp";
+        }
+        setSiteContent(data);
       } else {
         const savedContent = localStorage.getItem('ibqa_site_content');
         if (savedContent) {
