@@ -37,7 +37,23 @@ export default function Home() {
     return () => observerRef.current?.disconnect();
   }, []);
 
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "IBQA",
+    "url": "https://ibqastore.com/",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://ibqastore.com/shop?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  };
+
   return <div className={styles.main}>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+    />
     <section className={styles.hero} style={{ padding: 0, minHeight: 'auto', background: '#FFF9E6' }}>
       <HeroSlider />
     </section>
