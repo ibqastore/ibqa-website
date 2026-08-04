@@ -76,12 +76,25 @@ export default function Home() {
       </div>
     </section>
 
-    <section id="our-story" className={styles.story}><div className={styles.storyContent}><p className={styles.eyebrow}>OUR STORY</p><h2>Every Beautiful Skin Begins With <em>Trust.</em></h2><p>IBQA was created with one simple belief: skincare should protect before it promises.<br /><br />Inspired by Korean skincare philosophy, we craft gentle, effective formulas using carefully selected ingredients that nourish, strengthen, and care for your skin. No unnecessary complexity. No empty claims. Just skincare designed to become part of your everyday ritual.<br /><br />Protection Before Perfection.<br /><br />Because true confidence begins with healthy skin.</p></div><div className={styles.storyImage}><Image src={"/images/Our story/ibqa-story-v2.webp"} alt="A calm, luxurious skincare ritual" fill sizes="(max-width: 800px) 100vw, 50vw" /></div></section>
+    <section id="our-story" className={styles.story}>
+      <div className={styles.storyContent}>
+        <p className={styles.eyebrow}>OUR STORY</p>
+        <h2>{siteContent.ourStoryTitle ? <span dangerouslySetInnerHTML={{ __html: siteContent.ourStoryTitle.replace('Trust.', '<em>Trust.</em>') }} /> : "Every Beautiful Skin Begins With <em>Trust.</em>"}</h2>
+        <div>
+          {(siteContent.ourStoryText || "IBQA was created with one simple belief: skincare should protect before it promises.\n\nInspired by Korean skincare philosophy, we craft gentle, effective formulas using carefully selected ingredients that nourish, strengthen, and care for your skin. No unnecessary complexity. No empty claims. Just skincare designed to become part of your everyday ritual.\n\nProtection Before Perfection.\n\nBecause true confidence begins with healthy skin.").split('\n').map((paragraph, i) => (
+            <p key={i}>{paragraph}</p>
+          ))}
+        </div>
+      </div>
+      <div className={styles.storyImage}>
+        <Image src={siteContent.storyImage || "/images/Our story/ibqa-story-v2.webp"} alt="A calm, luxurious skincare ritual" fill sizes="(max-width: 800px) 100vw, 50vw" />
+      </div>
+    </section>
 
     <section id="ingredients" className={styles.editorialIngredients}>
       <div className={`${styles.editorialIntro} ${styles.animateUp}`}>
-        <p className={styles.eyebrow}>The Science Behind Every Drop</p>
-        <h2>Every ingredient is carefully selected for a reason—not because it's trending, but because your skin deserves <em>proven, gentle care</em> inspired by Korean skincare philosophy.</h2>
+        <p className={styles.eyebrow}>{siteContent.ingredientsTitle || "The Science Behind Every Drop"}</p>
+        <h2>{siteContent.ingredientsSubtitle ? <span dangerouslySetInnerHTML={{ __html: siteContent.ingredientsSubtitle.replace('proven, gentle care', '<em>proven, gentle care</em>') }} /> : "Every ingredient is carefully selected for a reason—not because it's trending, but because your skin deserves <em>proven, gentle care</em> inspired by Korean skincare philosophy."}</h2>
       </div>
 
       <div className={styles.editorialStack}>
@@ -147,7 +160,13 @@ export default function Home() {
       </div>
     </section>
 
-    <section id="results" className={styles.results}><div className={styles.sectionIntro}><p className={styles.eyebrow}>Your glow, revealed</p><h2>Real moments. <em>Beautiful results.</em></h2></div><BeforeAfterSlider beforeImage={siteContent.beforeImage || "/images/before-after/before.webp"} afterImage={siteContent.afterImage || "/images/before-after/after.webp"} /></section>
+    <section id="results" className={styles.results}>
+      <div className={styles.sectionIntro}>
+        <p className={styles.eyebrow}>Your glow, revealed</p>
+        <h2>{siteContent.resultsTitle ? <span dangerouslySetInnerHTML={{ __html: siteContent.resultsTitle.replace('Real Results.', '<em>Real Results.</em>') }} /> : "Real People. <em>Real Results.</em>"}</h2>
+      </div>
+      <BeforeAfterSlider beforeImage={siteContent.beforeImage || "/images/before-after/before.webp"} afterImage={siteContent.afterImage || "/images/before-after/after.webp"} />
+    </section>
 
     <section className={styles.reviews}><p className={styles.eyebrow}>Loved in the ritual</p><div className={styles.reviewsContainer}><div className={styles.reviewGrid}>{[...reviews, ...reviews].map(([quote, name], i) => <blockquote key={i}><div>{[1, 2, 3, 4, 5].map(star => <Star key={star} size={13} fill="currentColor" />)}</div><p>“{quote}”</p><cite>{name}</cite></blockquote>)}</div></div></section>
 

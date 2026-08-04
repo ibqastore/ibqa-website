@@ -23,19 +23,29 @@ export default function InactivityTimeout() {
       timeoutId = setTimeout(logout, TIMEOUT_MS);
     };
 
+    // Throttle the reset to avoid performance issues (hanging) on rapid events like scrolling/touching
+    let lastResetTime = Date.now();
+    const throttledResetTimer = () => {
+      const now = Date.now();
+      if (now - lastResetTime > 5000) { // Only reset if 5 seconds have passed
+        resetTimer();
+        lastResetTime = now;
+      }
+    };
+
     // Initialize timer
     resetTimer();
 
     // Listen to user activity events
     const events = ["mousemove", "keydown", "click", "scroll", "touchstart"];
     events.forEach((event) => {
-      window.addEventListener(event, resetTimer);
+      window.addEventListener(event, throttledResetTimer, { passive: true });
     });
 
     return () => {
       clearTimeout(timeoutId);
       events.forEach((event) => {
-        window.removeEventListener(event, resetTimer);
+        window.removeEventListener(event, throttledResetTimer);
       });
     };
   }, [router, supabase]);

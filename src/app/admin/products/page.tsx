@@ -339,7 +339,7 @@ export default function AdminProducts() {
               <label style={{ color: '#1f1f1f', fontWeight: 'bold', fontSize: '1.05rem' }}>⭐ Product Reviews</label>
               <button type="button" onClick={() => setFormData(prev => ({ ...prev, reviews: [...(prev.reviews || []), { author: '', rating: 5, text: '' }] }))} style={{ padding: '4px 12px', background: '#000', color: '#D4AF37', border: '1px solid #D4AF37', borderRadius: '4px', fontSize: '0.8rem', cursor: 'pointer' }}>+ Add Review</button>
             </div>
-            <div style={{ display: 'grid', gap: '1rem' }}>
+            <div className={styles.responsiveInlineGrid} style={{ display: 'grid', gap: '1rem' }}>
               {(formData.reviews || []).map((review, idx) => (
                 <div key={idx} style={{ padding: '0.8rem', background: '#fff', border: '1px solid #ddd', borderRadius: '6px', display: 'grid', gridTemplateColumns: '1fr 140px auto', gap: '8px', alignItems: 'start' }}>
                   <div style={{ display: 'grid', gap: '4px' }}>
@@ -407,7 +407,7 @@ export default function AdminProducts() {
           {/* Buy More Save More Tiers */}
           <div style={{ background: '#fcfcfc', border: '1px solid #e5e5e5', borderRadius: '8px', padding: '1.2rem', marginBottom: '2rem' }}>
             <label style={{ color: '#1f1f1f', fontWeight: 'bold', fontSize: '1.05rem', display: 'block', marginBottom: '0.8rem' }}>📦 Buy More Save More Tiers</label>
-            <div style={{ display: 'grid', gap: '0.6rem' }}>
+            <div className={styles.responsiveInlineGrid} style={{ display: 'grid', gap: '0.6rem' }}>
               {(formData.buyMoreSaveMore || []).map((tier, idx) => (
                 <div key={idx} style={{ display: 'grid', gridTemplateColumns: '80px 120px 1fr auto', gap: '8px', alignItems: 'center' }}>
                   <div style={{ fontSize: '0.8rem', color: '#888' }}>Qty:</div>

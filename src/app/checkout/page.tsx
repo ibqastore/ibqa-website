@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { useStore } from "@/context/StoreContext";
-import { Discount } from "@/context/StoreContext";
+import { useStore, Discount } from "@/context/StoreContext";
 import { useRouter } from "next/navigation";
-import { ChevronDown, Lock } from "lucide-react";
+import { ChevronDown, Lock, Loader2 } from "lucide-react";
 import { PAKISTAN_CITIES } from "@/data/cities";
+import { createClient } from "@/utils/supabase/client";
 import styles from "./checkout.module.css";
 
 export default function Checkout() {
@@ -25,6 +25,9 @@ export default function Checkout() {
   });
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("cod");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const supabase = createClient();
 
   const [showCityDropdown, setShowCityDropdown] = useState(false);
   const [citySearch, setCitySearch] = useState("");
@@ -87,7 +90,7 @@ export default function Checkout() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setHasSubmitted(true);
     
@@ -101,9 +104,32 @@ export default function Checkout() {
       alert("Your cart is empty!");
       return;
     }
+
+    setIsSubmitting(true);
     
-    // Simulate order placement
-    alert(`Order placed successfully! We will deliver to ${formData.city} soon. Payment method: ${paymentMethod.toUpperCase()}`);
+    // Save to database
+    const { data, error } = await supabase.from('orders').insert([
+      {
+        customer_info: formData,
+        order_items: cart,
+        subtotal: subtotal,
+        discount: discountAmount,
+        shipping: shipping,
+        total: total,
+        payment_method: paymentMethod,
+        status: 'pending'
+      }
+    ]);
+
+    setIsSubmitting(false);
+
+    if (error) {
+      console.error(error);
+      alert("Failed to place order. Please try again.");
+      return;
+    }
+
+    alert(`Order placed successfully! We will deliver to ${formData.city} soon.`);
     clearCart();
     router.push("/");
   };
@@ -353,7 +379,9 @@ export default function Checkout() {
           </div>
         </div>
 
-        <button type="submit" className={styles.submitBtn}>Place Order</button>
+        <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
+          {isSubmitting ? <Loader2 className="animate-spin" size={18} style={{ margin: '0 auto' }} /> : 'Place Order'}
+        </button>
       </form>
     </div>
   );

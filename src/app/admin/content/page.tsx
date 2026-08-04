@@ -123,7 +123,7 @@ export default function ContentPage() {
       {/* DELIVERY & PAYMENT SETTINGS */}
       <div className={styles.card} style={{ marginBottom: "2rem", borderLeft: "4px solid var(--accent-gold)" }}>
         <h2 style={{ fontSize: "1.4rem", marginBottom: "1.5rem", color: "var(--text-primary)" }}>Delivery & Payment Settings</h2>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem", marginBottom: "1.5rem" }}>
+        <div className={styles.responsiveInlineGrid} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem", marginBottom: "1.5rem" }}>
           <label>
             <span style={{ display: "block", fontSize: "0.9rem", fontWeight: 600, color: "var(--text-secondary)", marginBottom: "0.4rem" }}>Delivery Charge (Rs.)</span>
             <input
@@ -144,7 +144,7 @@ export default function ContentPage() {
           </label>
         </div>
         <h3 style={{ fontSize: "1rem", fontWeight: 700, marginBottom: "1rem", color: "#1f1f1f" }}>Payment / Bank Account Info (shown on checkout)</h3>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+        <div className={styles.responsiveInlineGrid} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
           <label>
             <span style={{ display: "block", fontSize: "0.85rem", fontWeight: 600, color: "var(--text-secondary)", marginBottom: "0.4rem" }}>Bank Name</span>
             <input type="text" value={siteContent.paymentInfo?.bankName || ""} onChange={(e) => setSiteContent({ ...siteContent, paymentInfo: { ...siteContent.paymentInfo, bankName: e.target.value } })} style={{ width: "100%", padding: "0.8rem", background: "#fff", border: "1px solid #ddd", color: "#1f1f1f" }} />
@@ -221,6 +221,69 @@ export default function ContentPage() {
         <p style={{ color: "var(--text-secondary)", fontSize: "0.75rem", marginTop: "0.5rem" }}>
           Note: Homepage button texts are locked to design standards and no longer editable from admin.
         </p>
+      </div>
+
+      {/* TEXT CONTENT SECTIONS */}
+      <div className={styles.card} style={{ marginBottom: "2rem" }}>
+        <h2 style={{ fontSize: "1.4rem", marginBottom: "1.5rem", color: "var(--text-primary)" }}>Homepage Text Content</h2>
+        
+        {/* OUR STORY */}
+        <div style={{ marginBottom: "2rem", paddingBottom: "1.5rem", borderBottom: "1px solid #eee" }}>
+          <h3 style={{ fontSize: "1.1rem", marginBottom: "1rem", color: "#1f1f1f" }}>Our Story Section</h3>
+          <label style={{ display: "block", marginBottom: "1rem" }}>
+            <span style={{ fontSize: "0.9rem", fontWeight: 600, color: "var(--text-secondary)" }}>Title</span>
+            <input 
+              type="text" 
+              value={siteContent.ourStoryTitle || ""} 
+              onChange={(e) => setSiteContent({ ...siteContent, ourStoryTitle: e.target.value })}
+              style={{ display: "block", width: "100%", marginTop: "0.45rem", padding: "0.8rem", background: "#fff", border: "1px solid #ddd", color: "#1f1f1f" }}
+            />
+          </label>
+          <label style={{ display: "block" }}>
+            <span style={{ fontSize: "0.9rem", fontWeight: 600, color: "var(--text-secondary)" }}>Content (Paragraphs separated by enter)</span>
+            <textarea 
+              value={siteContent.ourStoryText || ""} 
+              onChange={(e) => setSiteContent({ ...siteContent, ourStoryText: e.target.value })}
+              style={{ display: "block", width: "100%", marginTop: "0.45rem", padding: "0.8rem", background: "#fff", border: "1px solid #ddd", color: "#1f1f1f", minHeight: "150px", resize: "vertical" }}
+            />
+          </label>
+        </div>
+
+        {/* INGREDIENTS */}
+        <div style={{ marginBottom: "2rem", paddingBottom: "1.5rem", borderBottom: "1px solid #eee" }}>
+          <h3 style={{ fontSize: "1.1rem", marginBottom: "1rem", color: "#1f1f1f" }}>Ingredients Section</h3>
+          <label style={{ display: "block", marginBottom: "1rem" }}>
+            <span style={{ fontSize: "0.9rem", fontWeight: 600, color: "var(--text-secondary)" }}>Title</span>
+            <input 
+              type="text" 
+              value={siteContent.ingredientsTitle || ""} 
+              onChange={(e) => setSiteContent({ ...siteContent, ingredientsTitle: e.target.value })}
+              style={{ display: "block", width: "100%", marginTop: "0.45rem", padding: "0.8rem", background: "#fff", border: "1px solid #ddd", color: "#1f1f1f" }}
+            />
+          </label>
+          <label style={{ display: "block" }}>
+            <span style={{ fontSize: "0.9rem", fontWeight: 600, color: "var(--text-secondary)" }}>Subtitle</span>
+            <textarea 
+              value={siteContent.ingredientsSubtitle || ""} 
+              onChange={(e) => setSiteContent({ ...siteContent, ingredientsSubtitle: e.target.value })}
+              style={{ display: "block", width: "100%", marginTop: "0.45rem", padding: "0.8rem", background: "#fff", border: "1px solid #ddd", color: "#1f1f1f", minHeight: "80px", resize: "vertical" }}
+            />
+          </label>
+        </div>
+
+        {/* RESULTS */}
+        <div>
+          <h3 style={{ fontSize: "1.1rem", marginBottom: "1rem", color: "#1f1f1f" }}>Results Section</h3>
+          <label style={{ display: "block" }}>
+            <span style={{ fontSize: "0.9rem", fontWeight: 600, color: "var(--text-secondary)" }}>Title</span>
+            <input 
+              type="text" 
+              value={siteContent.resultsTitle || ""} 
+              onChange={(e) => setSiteContent({ ...siteContent, resultsTitle: e.target.value })}
+              style={{ display: "block", width: "100%", marginTop: "0.45rem", padding: "0.8rem", background: "#fff", border: "1px solid #ddd", color: "#1f1f1f" }}
+            />
+          </label>
+        </div>
       </div>
 
       {/* HERO CAROUSEL PICTURES */}
@@ -315,7 +378,7 @@ export default function ContentPage() {
       <div className={styles.card}>
         <h2 style={{ fontSize: "1.4rem", marginBottom: "1rem", color: "var(--text-primary)" }}>Other Website Section Pictures</h2>
         
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
+        <div className={styles.responsiveInlineGrid} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
           {/* STORY IMAGE */}
           <div style={{ padding: "1rem", background: "#fcfaf6", border: "1px solid #e8e2d8", borderRadius: "6px" }}>
             <label style={{ display: "block", fontWeight: 700, marginBottom: "0.5rem", color: "#1f1f1f" }}>🌿 Our Story Section Image</label>
@@ -399,7 +462,7 @@ export default function ContentPage() {
       {/* CONTACT INFO SETTINGS */}
       <div className={styles.card} style={{ marginBottom: "2rem", borderLeft: "4px solid var(--accent-gold)" }}>
         <h2 style={{ fontSize: "1.4rem", marginBottom: "1.5rem", color: "var(--text-primary)" }}>Store Contact Information</h2>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem", marginBottom: "1.5rem" }}>
+        <div className={styles.responsiveInlineGrid} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem", marginBottom: "1.5rem" }}>
           <label>
             <span style={{ display: "block", fontSize: "0.9rem", fontWeight: 600, color: "var(--text-secondary)", marginBottom: "0.4rem" }}>Phone Number / WhatsApp</span>
             <input

@@ -37,7 +37,12 @@ export interface SiteContent {
   heroDescription?: string;
   announcement: string;
   heroSlides: HeroSlide[];
+  ourStoryTitle: string;
+  ourStoryText: string;
   storyImage: string;
+  ingredientsTitle: string;
+  ingredientsSubtitle: string;
+  resultsTitle: string;
   beforeImage: string;
   afterImage: string;
   shippingFee: number;
@@ -66,9 +71,14 @@ const defaultSiteContent: SiteContent = {
     { id: "slide-2", pc: "/images/hero/serum-facewash-pc.webp", mobile: "/images/hero/facewash-serum-hero-mobile.webp", title: "Brightening Duo" },
     { id: "slide-3", pc: "/images/hero/serum-hero-pc.webp", mobile: "/images/hero/serum-hero-mobile.webp", title: "Niacinamide Serum" }
   ],
-  storyImage: "/images/Lifestyle/luxury-bathroom.webp",
-  beforeImage: "/images/before-after/before.webp",
-  afterImage: "/images/before-after/after.webp",
+  ourStoryTitle: "Every Beautiful Skin Begins With Trust.",
+  ourStoryText: "IBQA was created with one simple belief: skincare should protect before it promises.\n\nInspired by Korean skincare philosophy, we craft gentle, effective formulas using carefully selected ingredients that nourish, strengthen, and care for your skin. No unnecessary complexity. No empty claims. Just skincare designed to become part of your everyday ritual.\n\nProtection Before Perfection.\n\nBecause true confidence begins with healthy skin.",
+  storyImage: "/images/Our story/ibqa-story-v2.webp",
+  ingredientsTitle: "The Science Behind Every Drop",
+  ingredientsSubtitle: "Every ingredient is carefully selected for a reason—not because it's trending, but because your skin deserves proven, gentle care inspired by Korean skincare philosophy.",
+  resultsTitle: "Real People. Real Results.",
+  beforeImage: "/images/hero/before.webp",
+  afterImage: "/images/hero/after.webp",
   shippingFee: 200,
   freeShippingThreshold: 3000,
   paymentInfo: {

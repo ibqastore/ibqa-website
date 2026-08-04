@@ -56,7 +56,16 @@ export default function Header() {
     <>
       <div style={{ height: '95px' }} aria-hidden="true" />
       <header className={`${styles.header} ${isScrolled ? styles.scrolled : ''} ${isHidden ? styles.hidden : ''}`}>
-        <Link href="/" className={styles.logo}>
+        <Link 
+          href="/" 
+          className={styles.logo}
+          onClick={(e) => {
+            if (pathname === '/') {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+          }}
+        >
           <Image
             src="/images/logo/logo-main.webp"
             alt="IBQA Skincare Logo"

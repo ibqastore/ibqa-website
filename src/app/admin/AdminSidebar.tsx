@@ -30,10 +30,10 @@ export default function AdminSidebar({ onClose }: { onClose?: () => void }) {
 
   return (
     <aside className={styles.sidebar}>
-      <div className={styles.sidebarLogo} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', padding: '1rem 0' }}>
+      <Link href="/" className={styles.sidebarLogo} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', padding: '1rem 0', textDecoration: 'none' }}>
         <Image src="/images/logo/logo-main.webp" alt="IBQA Logo" width={500} height={500} style={{ width: '80px', height: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.5))' }} />
         <span style={{ fontSize: '0.75rem', letterSpacing: '2px', color: 'var(--accent-gold)' }}>ADMIN PANEL</span>
-      </div>
+      </Link>
       <nav className={styles.sidebarNav}>
         <Link href="/admin" className={getLinkClass("/admin")} onClick={onClose}>
           <LayoutDashboard size={20} />

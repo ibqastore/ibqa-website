@@ -13,7 +13,7 @@ export default function AdminDashboard() {
         <h1 className={styles.pageTitle}>Dashboard Overview</h1>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '2rem', marginBottom: '3rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '2rem', marginBottom: '3rem' }}>
         <div className={styles.card}>
           <h3 style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Total Products</h3>
           <p style={{ fontSize: '2.5rem', color: 'var(--accent-gold)' }}>{products.length}</p>
