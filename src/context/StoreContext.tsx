@@ -73,7 +73,7 @@ const defaultSiteContent: SiteContent = {
   ],
   ourStoryTitle: "Every Beautiful Skin Begins With Trust.",
   ourStoryText: "IBQA was created with one simple belief: skincare should protect before it promises.\n\nInspired by Korean skincare philosophy, we craft gentle, effective formulas using carefully selected ingredients that nourish, strengthen, and care for your skin. No unnecessary complexity. No empty claims. Just skincare designed to become part of your everyday ritual.\n\nProtection Before Perfection.\n\nBecause true confidence begins with healthy skin.",
-  storyImage: "/images/Our story/ibqa-story-v2.webp",
+  storyImage: "/images/our-story/ibqa-story-v2.webp",
   ingredientsTitle: "The Science Behind Every Drop",
   ingredientsSubtitle: "Every ingredient is carefully selected for a reason—not because it's trending, but because your skin deserves proven, gentle care inspired by Korean skincare philosophy.",
   resultsTitle: "Real People. Real Results.",

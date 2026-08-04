@@ -87,7 +87,7 @@ export default function Home() {
         </div>
       </div>
       <div className={styles.storyImage}>
-        <Image src={siteContent.storyImage || "/images/Our story/ibqa-story-v2.webp"} alt="A calm, luxurious skincare ritual" fill sizes="(max-width: 800px) 100vw, 50vw" />
+        <Image src={siteContent.storyImage || "/images/our-story/ibqa-story-v2.webp"} alt="A calm, luxurious skincare ritual" fill sizes="(max-width: 800px) 100vw, 50vw" />
       </div>
     </section>
 
