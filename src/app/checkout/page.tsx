@@ -26,6 +26,7 @@ export default function Checkout() {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("cod");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [orderPlaced, setOrderPlaced] = useState(false);
 
   const supabase = createClient();
 
@@ -129,10 +130,21 @@ export default function Checkout() {
       return;
     }
 
-    alert(`Order placed successfully! We will deliver to ${formData.city} soon.`);
     clearCart();
-    router.push("/");
+    setOrderPlaced(true);
   };
+
+  if (orderPlaced) {
+    return (
+      <div style={{ textAlign: 'center', padding: '150px 20px', minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+        <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem', color: 'var(--brand-primary)' }}>Order Confirmed! 🎉</h2>
+        <p style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', marginBottom: '2.5rem', maxWidth: '500px', lineHeight: '1.6' }}>
+          Thank you for your purchase, {formData.firstName}. Your order has been placed successfully and will be shipped to {formData.city} soon.
+        </p>
+        <button onClick={() => router.push('/')} className={styles.submitBtn} style={{ maxWidth: '300px' }}>Return to Shop</button>
+      </div>
+    );
+  }
 
   if (cart.length === 0) {
     return (
