@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useStore } from "@/context/StoreContext";
 import { Product, ProductReview, ProductFaq, BuyMoreTier } from "@/data/products";
+import { createClient } from "@/utils/supabase/client";
 import styles from "../admin.module.css";
 import RichText from "@/components/RichText";
 
@@ -31,13 +32,33 @@ export default function AdminProducts() {
     ]
   });
 
-  const handleSave = () => {
+  const supabase = createClient();
+
+  const handleSave = async () => {
     if (!formData.name || !formData.price) return;
     
+    let savedProduct: Product;
+
     if (editingId) {
-      setProducts(prev => prev.map(p => p.id === editingId ? { ...p, ...formData } as Product : p));
+      savedProduct = { ...products.find(p => p.id === editingId), ...formData } as Product;
+      
+      const { error } = await supabase.from('products').update({
+        name: savedProduct.name,
+        price: savedProduct.price,
+        originalPrice: savedProduct.originalPrice,
+        category: savedProduct.category,
+        description: savedProduct.description,
+        image: savedProduct.image,
+      }).eq('id', editingId);
+
+      if (error) {
+        alert("Error updating product in database!");
+        console.error(error);
+        return;
+      }
+      setProducts(prev => prev.map(p => p.id === editingId ? savedProduct : p));
     } else {
-      const newProduct: Product = {
+      savedProduct = {
         id: `p${Date.now()}`,
         name: formData.name,
         price: Number(formData.price),
@@ -49,7 +70,23 @@ export default function AdminProducts() {
         ingredients: formData.ingredients || [],
         howToUse: formData.howToUse || ""
       };
-      setProducts(prev => [...prev, newProduct]);
+
+      const { error } = await supabase.from('products').insert([{
+        id: savedProduct.id,
+        name: savedProduct.name,
+        price: savedProduct.price,
+        originalPrice: savedProduct.originalPrice,
+        category: savedProduct.category,
+        description: savedProduct.description,
+        image: savedProduct.image
+      }]);
+
+      if (error) {
+        alert("Error adding product to database!");
+        console.error(error);
+        return;
+      }
+      setProducts(prev => [...prev, savedProduct]);
     }
     
     setIsAdding(false);
@@ -63,8 +100,13 @@ export default function AdminProducts() {
     setIsAdding(true);
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (confirm("Are you sure you want to delete this product?")) {
+      const { error } = await supabase.from('products').delete().eq('id', id);
+      if (error) {
+        alert("Error deleting from database!");
+        return;
+      }
       setProducts(prev => prev.filter(p => p.id !== id));
     }
   };
@@ -83,22 +125,30 @@ export default function AdminProducts() {
       };
       const compressedFile = await imageCompression(file, options);
       
-      const response = await fetch(`/api/upload?filename=${encodeURIComponent(compressedFile.name || 'product.webp')}`, {
-        method: 'POST',
-        body: compressedFile,
-      });
+      const fileName = `${Date.now()}-${compressedFile.name || 'product.webp'}`;
+      
+      const { data, error } = await supabase
+        .storage
+        .from('images')
+        .upload(`products/${fileName}`, compressedFile);
 
-      if (!response.ok) throw new Error('Failed to upload file');
-      const newBlob = await response.json();
+      if (error) {
+        throw error;
+      }
+      
+      const { data: { publicUrl } } = supabase
+        .storage
+        .from('images')
+        .getPublicUrl(`products/${fileName}`);
       
       setFormData((current) => {
         const currentImages = current.images && current.images.length > 0 ? current.images : (current.image ? [current.image] : []);
-        const newImages = [...currentImages, newBlob.url];
+        const newImages = [...currentImages, publicUrl];
         return { ...current, image: newImages[0] || "", images: newImages };
       });
     } catch (error) {
       console.error("Upload error:", error);
-      alert("Failed to compress and upload image.");
+      alert("Failed to upload image. Make sure you have created the 'images' bucket in Supabase.");
     }
   };
 
@@ -204,7 +254,7 @@ export default function AdminProducts() {
                 </div>
               </div>
               <textarea 
-                value={formData.description} 
+                value={formData.description || ""} 
                 onChange={e => setFormData({...formData, description: e.target.value})} 
                 placeholder="Type description or click the interactive formatting buttons above..."
                 style={{ width: '100%', minHeight: '120px', padding: '0.8rem', background: '#fff', border: '1px solid #ccc', borderRadius: '6px', color: '#1f1f1f', fontFamily: 'monospace', fontSize: '0.95rem' }} 
@@ -218,7 +268,7 @@ export default function AdminProducts() {
             {/* Ingredients Editor */}
             <div>
               <label style={{ display: 'block', marginBottom: '0.5rem', color: '#1f1f1f', fontWeight: 'bold', fontSize: '1.05rem' }}>🌿 Ingredients (Comma Separated — Auto-creates interactive tag chips)</label>
-              <input type="text" value={formData.ingredients?.join(', ')} onChange={e => setFormData({...formData, ingredients: e.target.value.split(',').map(x => x.trim()).filter(Boolean)})} placeholder="e.g. Rice Extract, Niacinamide, Glycerin, Hyaluronic Acid" style={{ width: '100%', padding: '0.8rem', background: '#fff', border: '1px solid #ccc', borderRadius: '6px', color: '#1f1f1f', fontSize: '1rem' }} />
+              <input type="text" value={formData.ingredients?.join(', ') || ""} onChange={e => setFormData({...formData, ingredients: e.target.value.split(',').map(x => x.trim()).filter(Boolean)})} placeholder="e.g. Rice Extract, Niacinamide, Glycerin, Hyaluronic Acid" style={{ width: '100%', padding: '0.8rem', background: '#fff', border: '1px solid #ccc', borderRadius: '6px', color: '#1f1f1f', fontSize: '1rem' }} />
             </div>
 
             {/* Interactive How To Use Editor */}
@@ -232,7 +282,7 @@ export default function AdminProducts() {
                 </div>
               </div>
               <textarea 
-                value={formData.howToUse} 
+                value={formData.howToUse || ""} 
                 onChange={e => setFormData({...formData, howToUse: e.target.value})} 
                 placeholder="Enter step-by-step instructions or click formatting buttons above..."
                 style={{ width: '100%', minHeight: '100px', padding: '0.8rem', background: '#fff', border: '1px solid #ccc', borderRadius: '6px', color: '#1f1f1f', fontFamily: 'monospace', fontSize: '0.95rem' }} 
@@ -265,11 +315,13 @@ export default function AdminProducts() {
                       const imageCompression = (await import('browser-image-compression')).default;
                       const compressedFile = await imageCompression(file, { maxSizeMB: 1, maxWidthOrHeight: 1200, useWebWorker: true });
                       
-                      const response = await fetch(`/api/upload?filename=${encodeURIComponent(compressedFile.name || 'desc.webp')}`, { method: 'POST', body: compressedFile });
-                      if (!response.ok) throw new Error('Failed to upload file');
-                      const newBlob = await response.json();
+                      const fileName = `${Date.now()}-${compressedFile.name || 'desc.webp'}`;
+                      const { error } = await supabase.storage.from('images').upload(`products/${fileName}`, compressedFile);
+                      if (error) throw error;
                       
-                      setFormData(prev => ({ ...prev, descriptionImages: [...(prev.descriptionImages || []), newBlob.url] }));
+                      const { data: { publicUrl } } = supabase.storage.from('images').getPublicUrl(`products/${fileName}`);
+                      
+                      setFormData(prev => ({ ...prev, descriptionImages: [...(prev.descriptionImages || []), publicUrl] }));
                     } catch (error) {
                       console.error("Upload error:", error);
                       alert("Failed to compress and upload description image.");
@@ -303,11 +355,13 @@ export default function AdminProducts() {
                             if (file.size > 10_000_000) return alert("Please keep videos under 10MB for this demo.");
                             const uploadVideo = async () => {
                               try {
-                                const response = await fetch(`/api/upload?filename=${encodeURIComponent(file.name || 'video.mp4')}`, { method: 'POST', body: file });
-                                if (!response.ok) throw new Error('Failed to upload video');
-                                const newBlob = await response.json();
+                                const fileName = `${Date.now()}-${file.name || 'video.mp4'}`;
+                                const { error } = await supabase.storage.from('images').upload(`products/${fileName}`, file);
+                                if (error) throw error;
+                                
+                                const { data: { publicUrl } } = supabase.storage.from('images').getPublicUrl(`products/${fileName}`);
                                 const r = [...(formData.reviews || [])];
-                                r[idx] = { ...r[idx], videoUrl: newBlob.url };
+                                r[idx] = { ...r[idx], videoUrl: publicUrl };
                                 setFormData(prev => ({ ...prev, reviews: r }));
                               } catch(e) {
                                 console.error(e);

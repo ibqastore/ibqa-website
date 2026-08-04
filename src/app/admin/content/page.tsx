@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useStore, HeroSlide } from "@/context/StoreContext";
 import { Upload, Image as ImageIcon, Leaf, Plus, Trash2 } from "lucide-react";
+import { createClient } from "@/utils/supabase/client";
 import styles from "../admin.module.css";
 
 export default function ContentPage() {
@@ -10,13 +11,24 @@ export default function ContentPage() {
   const [quickUploadResult, setQuickUploadResult] = useState<string | null>(null);
   const [hasWarned, setHasWarned] = useState(false);
 
-  const setSiteContent = (newContent: any) => {
+  const supabase = createClient();
+
+  const setSiteContent = async (newContent: any) => {
     if (!hasWarned) {
       if (!confirm("Warning: Changing this content will directly affect the live website. Do you want to proceed?")) {
         return;
       }
       setHasWarned(true);
     }
+    
+    const { error } = await supabase.from('site_content').update({ data: newContent }).eq('id', 1);
+    
+    if (error) {
+      alert("Error saving to database!");
+      console.error(error);
+      return;
+    }
+    
     originalSetSiteContent(newContent);
   };
 
@@ -33,17 +45,23 @@ export default function ContentPage() {
       
       const compressedFile = await imageCompression(file, options);
       
-      const response = await fetch(`/api/upload?filename=${encodeURIComponent(compressedFile.name || 'image.webp')}`, {
-        method: 'POST',
-        body: compressedFile,
-      });
+      const fileName = `${Date.now()}-${compressedFile.name || 'image.webp'}`;
+      
+      const { data, error } = await supabase
+        .storage
+        .from('images')
+        .upload(`content/${fileName}`, compressedFile);
 
-      if (!response.ok) {
-        throw new Error('Failed to upload file');
+      if (error) {
+        throw error;
       }
 
-      const newBlob = await response.json();
-      callback(newBlob.url);
+      const { data: { publicUrl } } = supabase
+        .storage
+        .from('images')
+        .getPublicUrl(`content/${fileName}`);
+
+      callback(publicUrl);
     } catch (error) {
       console.error("Upload error:", error);
       alert("Failed to compress and upload image.");

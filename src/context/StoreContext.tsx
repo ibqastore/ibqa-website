@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Product, products as defaultProducts } from '@/data/products';
+import { createClient } from '@/utils/supabase/client';
 
 export interface CartItem extends Product {
   quantity: number;
@@ -123,38 +124,48 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [recentlyViewed, setRecentlyViewed] = useState<string[]>([]);
   const [subscribers, setSubscribers] = useState<string[]>([]);
 
-  // Load from localStorage on mount
+  // Load from Supabase & localStorage on mount
   useEffect(() => {
-    const savedProducts = localStorage.getItem('ibqa_products');
+    const supabase = createClient();
+
+    const fetchProductsAndContent = async () => {
+      // Fetch Products
+      const { data: productsData, error: productsError } = await supabase.from('products').select('*');
+      if (productsData && !productsError) {
+        const mergedProducts = productsData.map((dbProduct: any) => {
+          const original = defaultProducts.find(p => p.id === dbProduct.id) || {};
+          return { ...original, ...dbProduct };
+        });
+        setProducts(mergedProducts as Product[]);
+      } else {
+        const savedProducts = localStorage.getItem('ibqa_products');
+        if (savedProducts) {
+          const migrated = savedProducts.replace(/\.png/gi, '.webp').replace(/\.jpeg/gi, '.webp').replace(/\.jpg/gi, '.webp');
+          setProducts(JSON.parse(migrated));
+        }
+      }
+
+      // Fetch Site Content
+      const { data: contentData, error: contentError } = await supabase.from('site_content').select('data').eq('id', 1).single();
+      if (contentData && !contentError) {
+        setSiteContent(contentData.data);
+      } else {
+        const savedContent = localStorage.getItem('ibqa_site_content');
+        if (savedContent) {
+          setSiteContent(JSON.parse(savedContent));
+        }
+      }
+    };
+
+    fetchProductsAndContent();
+
     const savedCart = localStorage.getItem('ibqa_cart');
     const savedDiscounts = localStorage.getItem('ibqa_discounts');
-    const savedContent = localStorage.getItem('ibqa_site_content');
     const savedRecent = localStorage.getItem('ibqa_recently_viewed');
     const savedSubscribers = localStorage.getItem('ibqa_subscribers');
-
-    // The provider intentionally hydrates persisted browser-only demo state after mount.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (savedProducts) {
-      const migrated = savedProducts.replace(/\.png/gi, '.webp').replace(/\.jpeg/gi, '.webp').replace(/\.jpg/gi, '.webp');
-      setProducts(JSON.parse(migrated));
-    }
     if (savedCart) setCart(JSON.parse(savedCart));
     if (savedDiscounts) setDiscounts(JSON.parse(savedDiscounts));
-    if (savedContent) {
-      try {
-        const migratedContent = savedContent.replace(/\.png/gi, '.webp').replace(/\.jpeg/gi, '.webp').replace(/\.jpg/gi, '.webp');
-        const parsed = JSON.parse(migratedContent);
-        setSiteContent({ 
-          ...defaultSiteContent, 
-          ...parsed, 
-          paymentInfo: { ...defaultSiteContent.paymentInfo, ...(parsed.paymentInfo || {}) },
-          policies: { ...defaultSiteContent.policies, ...(parsed.policies || {}) },
-          contactInfo: { ...defaultSiteContent.contactInfo, ...(parsed.contactInfo || {}) }
-        });
-      } catch (e) {
-        console.error("Error loading site content:", e);
-      }
-    }
+
     if (savedRecent) setRecentlyViewed(JSON.parse(savedRecent));
     if (savedSubscribers) setSubscribers(JSON.parse(savedSubscribers));
   }, []);

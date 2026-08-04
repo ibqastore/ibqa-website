@@ -11,7 +11,11 @@
 .promiseItem span { width:4px; height:4px; border-radius:50%; background:#fff; }
 .collection,.ingredients,.results,.faq { padding: clamp(5rem, 10vw, 9rem) clamp(1.5rem, 8vw, 8rem); }.sectionIntro { text-align:center; margin:0 auto 3.7rem; max-width:960px; }.sectionIntro h2 { color:var(--text-primary); font-size:clamp(2.2rem,8vw,5.2rem); }.sectionIntro>p:last-child { margin-top:1.25rem; color:var(--text-secondary); font-size:.86rem; }
 .mobileBreak { display: none; }
-.productGrid { display:grid; grid-template-columns:repeat(3, 1fr); gap:2rem; max-width:1300px; margin:0 auto 2.6rem; align-items:stretch; padding:0 0.5rem; }
+.productGrid { display:flex; flex-direction:row; overflow-x:auto; scroll-snap-type:x mandatory; scroll-behavior:smooth; gap:1.5rem; max-width:1300px; margin:0 auto 2.6rem; align-items:stretch; padding:1rem 0.5rem 2rem 0.5rem; }
+.productGrid::-webkit-scrollbar { height: 8px; }
+.productGrid::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+.productGrid::-webkit-scrollbar-thumb { background: #d0aa69; border-radius: 4px; }
+.productGrid > * { flex:0 0 calc(33.333% - 1rem); scroll-snap-align:start; min-width:280px; }
 .story { display:grid; grid-template-columns:1fr 1fr; background:var(--background-secondary); min-height:calc(100vh - 80px); align-items:stretch; }
 .storyImage { position:relative; height:100%; min-height:400px; }
 .storyImage img { object-fit:cover; }

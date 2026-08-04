@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useStore } from "@/context/StoreContext";
 import styles from "../admin.module.css";
 import { Save } from "lucide-react";
+import { createClient } from "@/utils/supabase/client";
 
 export default function AdminPolicies() {
   const { siteContent, setSiteContent } = useStore();
@@ -23,8 +24,20 @@ export default function AdminPolicies() {
     setPolicies({ ...policies, [activeTab]: val });
   };
 
-  const handleSave = () => {
-    setSiteContent({ ...siteContent, policies });
+  const supabase = createClient();
+
+  const handleSave = async () => {
+    const newContent = { ...siteContent, policies };
+    
+    const { error } = await supabase.from('site_content').update({ data: newContent }).eq('id', 1);
+    
+    if (error) {
+      alert("Error saving policies to database!");
+      console.error(error);
+      return;
+    }
+    
+    setSiteContent(newContent);
     alert("Policies saved successfully!");
   };
 
@@ -78,14 +91,15 @@ export default function AdminPolicies() {
             onChange={(e) => handleEdit(e.target.value)}
             style={{
               width: '100%',
-              minHeight: '400px',
+              height: 'calc(100vh - 280px)', /* Adjusted to prevent page scroll */
+              minHeight: '300px',
               padding: '1rem',
               border: '1px solid #ddd',
               borderRadius: '8px',
               fontFamily: 'monospace',
               fontSize: '0.9rem',
               lineHeight: '1.6',
-              resize: 'vertical'
+              resize: 'none' /* Disable manual resize to avoid breaking layout */
             }}
           />
         </div>

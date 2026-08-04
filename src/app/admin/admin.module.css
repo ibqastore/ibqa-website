@@ -11,6 +11,7 @@
   padding: 2rem 0;
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 .sidebarLogo {
@@ -25,6 +26,7 @@
 .sidebarNav {
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
 .sidebarLink {
@@ -38,7 +40,7 @@
   border-left: 3px solid transparent;
 }
 
-.sidebarLink:hover {
+.sidebarLink:hover, .sidebarLink.active {
   background-color: rgba(255,255,255,0.08);
   color: var(--accent-gold);
   border-left-color: var(--accent-gold);
@@ -47,7 +49,6 @@
 .mainContent {
   flex-grow: 1;
   padding: 3rem clamp(1.5rem, 4vw, 4rem);
-  overflow-y: auto;
 }
 
 .pageHeader {
@@ -213,8 +214,6 @@
   
   .sidebarWrapper {
     display: flex;
-    height: 100vh;
-    position: sticky;
-    top: 0;
+    height: 100%;
   }
 }

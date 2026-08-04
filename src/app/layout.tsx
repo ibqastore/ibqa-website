@@ -21,7 +21,12 @@ const cormorant = Cormorant_Garamond({
 export const metadata: Metadata = {
   title: "IBQA Skincare | Premium Luxury Skincare",
   description: "Reveal Your Natural Glow. Premium skincare made for healthier, radiant skin.",
+  icons: {
+    icon: '/images/logo/logo-main.webp',
+  }
 };
+
+import ClientLayout from "@/components/ClientLayout";
 
 export default function RootLayout({
   children,
@@ -32,12 +37,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${manrope.variable} ${cormorant.variable}`}>
         <StoreProvider>
-          <Header />
-          <main style={{ minHeight: '100vh' }}>
+          <ClientLayout>
             {children}
-          </main>
-          <Footer />
-          <WhatsAppWidget />
+          </ClientLayout>
         </StoreProvider>
       </body>
     </html>
