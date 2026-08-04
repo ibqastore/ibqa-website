@@ -15,7 +15,7 @@ export async function generateMetadata(
     return { title: "Product Not Found" };
   }
 
-  const images = product.images.map(img => `https://ibqastore.com${img}`);
+  const images = (product.images || []).map(img => `https://ibqastore.com${img}`);
 
   return {
     title: `${product.name} | IBQA Skincare`,
@@ -46,7 +46,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
     "@context": "https://schema.org",
     "@type": "Product",
     "name": product.name,
-    "image": product.images.map(img => `https://ibqastore.com${img}`),
+    "image": (product.images || []).map(img => `https://ibqastore.com${img}`),
     "description": product.description.replace(/\[badge:.*?\]/g, '').trim(),
     "brand": {
       "@type": "Brand",
