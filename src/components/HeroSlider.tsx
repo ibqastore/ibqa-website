@@ -8,13 +8,18 @@ export default function HeroSlider() {
   const { siteContent } = useStore();
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const slides = (siteContent.heroSlides && siteContent.heroSlides.length > 0)
+  const rawSlides = (siteContent.heroSlides && siteContent.heroSlides.length > 0)
     ? siteContent.heroSlides
     : [
         { id: "slide-1", pc: "/images/hero/facewash-hero-pc.webp", mobile: "/images/hero/facewash-hero-mobile.webp", title: "Rice Extract Face Wash" },
         { id: "slide-2", pc: "/images/hero/serum-facewash-pc.webp", mobile: "/images/hero/facewash-serum-hero-mobile.webp", title: "Brightening Duo" },
         { id: "slide-3", pc: "/images/hero/serum-hero-pc.webp", mobile: "/images/hero/serum-hero-mobile.webp", title: "Niacinamide Serum" }
       ];
+
+  // Remove duplicates just in case the database or local storage has repeating items
+  const slides = rawSlides.filter((slide, index, self) => 
+    index === self.findIndex((t) => t.pc === slide.pc)
+  );
 
   useEffect(() => {
     if (slides.length <= 1) return;
