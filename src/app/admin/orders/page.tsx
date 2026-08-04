@@ -178,11 +178,11 @@ export default function AdminOrders() {
                             fontSize: '0.75rem', 
                             fontWeight: 600,
                             backgroundColor: 
-                              statusCapitalized === 'Delivered' ? '#dcfce7' : 
+                              (statusCapitalized === 'Delivered' || statusCapitalized === 'Completed') ? '#dcfce7' : 
                               statusCapitalized === 'Cancelled' ? '#fee2e2' : 
                               '#f3f4f6',
                             color: 
-                              statusCapitalized === 'Delivered' ? '#166534' : 
+                              (statusCapitalized === 'Delivered' || statusCapitalized === 'Completed') ? '#166534' : 
                               statusCapitalized === 'Cancelled' ? '#991b1b' : 
                               '#374151'
                           }}>
