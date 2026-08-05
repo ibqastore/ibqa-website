@@ -316,17 +316,17 @@ export default function ContentPage() {
                 )}
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
+              <div className={styles.bannersGrid}>
                 {/* PC IMAGE UPLOAD */}
                 <div>
                   <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 700, marginBottom: "0.5rem", color: "#1f1f1f" }}>🖥️ Desktop / PC Banner Image</label>
-                  <div style={{ display: "flex", gap: "0.8rem", alignItems: "center", marginBottom: "0.5rem" }}>
+                  <div style={{ display: "flex", gap: "0.8rem", alignItems: "center", marginBottom: "0.5rem", flexWrap: "wrap" }}>
                     <img src={slide.pc} alt="PC Banner" style={{ width: "80px", height: "45px", objectFit: "cover", borderRadius: "4px", border: "1px solid #ddd" }} />
                     <input 
                       type="text" 
                       value={slide.pc} 
                       onChange={(e) => updateSlide(idx, "pc", e.target.value)} 
-                      style={{ flexGrow: 1, padding: "0.6rem", background: "#fff", border: "1px solid #ddd", fontSize: "0.8rem", color: "#1f1f1f" }} 
+                      style={{ flexGrow: 1, minWidth: "150px", padding: "0.6rem", background: "#fff", border: "1px solid #ddd", fontSize: "0.8rem", color: "#1f1f1f" }} 
                     />
                   </div>
                   <label style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem", background: "#111", color: "#fff", padding: "0.4rem 0.8rem", borderRadius: "4px", fontSize: "0.75rem", fontWeight: 600, cursor: "pointer" }}>
@@ -346,13 +346,13 @@ export default function ContentPage() {
                 {/* MOBILE IMAGE UPLOAD */}
                 <div>
                   <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 700, marginBottom: "0.5rem", color: "#1f1f1f" }}>📱 Mobile Screen Banner Image</label>
-                  <div style={{ display: "flex", gap: "0.8rem", alignItems: "center", marginBottom: "0.5rem" }}>
+                  <div style={{ display: "flex", gap: "0.8rem", alignItems: "center", marginBottom: "0.5rem", flexWrap: "wrap" }}>
                     <img src={slide.mobile} alt="Mobile Banner" style={{ width: "45px", height: "70px", objectFit: "cover", borderRadius: "4px", border: "1px solid #ddd" }} />
                     <input 
                       type="text" 
                       value={slide.mobile} 
                       onChange={(e) => updateSlide(idx, "mobile", e.target.value)} 
-                      style={{ flexGrow: 1, padding: "0.6rem", background: "#fff", border: "1px solid #ddd", fontSize: "0.8rem", color: "#1f1f1f" }} 
+                      style={{ flexGrow: 1, minWidth: "150px", padding: "0.6rem", background: "#fff", border: "1px solid #ddd", fontSize: "0.8rem", color: "#1f1f1f" }} 
                     />
                   </div>
                   <label style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem", background: "#111", color: "#fff", padding: "0.4rem 0.8rem", borderRadius: "4px", fontSize: "0.75rem", fontWeight: 600, cursor: "pointer" }}>
@@ -378,17 +378,17 @@ export default function ContentPage() {
       <div className={styles.card}>
         <h2 style={{ fontSize: "1.4rem", marginBottom: "1rem", color: "var(--text-primary)" }}>Other Website Section Pictures</h2>
         
-        <div className={styles.responsiveInlineGrid} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
+        <div className={styles.bannersGrid}>
           {/* STORY IMAGE */}
           <div style={{ padding: "1rem", background: "#fcfaf6", border: "1px solid #e8e2d8", borderRadius: "6px" }}>
             <label style={{ display: "block", fontWeight: 700, marginBottom: "0.5rem", color: "#1f1f1f" }}>🌿 Our Story Section Image</label>
-            <div style={{ display: "flex", gap: "0.8rem", alignItems: "center", marginBottom: "0.5rem" }}>
+            <div style={{ display: "flex", gap: "0.8rem", alignItems: "center", marginBottom: "0.5rem", flexWrap: "wrap" }}>
               <img src={siteContent.storyImage || "/images/our-story/ibqa-story-v2.webp"} alt="Story" style={{ width: "60px", height: "60px", objectFit: "cover", borderRadius: "4px" }} />
               <input 
                 type="text" 
                 value={siteContent.storyImage || ""} 
                 onChange={(e) => setSiteContent({ ...siteContent, storyImage: e.target.value })}
-                style={{ flexGrow: 1, padding: "0.6rem", background: "#fff", border: "1px solid #ddd", fontSize: "0.8rem", color: "#1f1f1f" }} 
+                style={{ flexGrow: 1, minWidth: "150px", padding: "0.6rem", background: "#fff", border: "1px solid #ddd", fontSize: "0.8rem", color: "#1f1f1f" }} 
               />
             </div>
             <label style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem", background: "#111", color: "#fff", padding: "0.4rem 0.8rem", borderRadius: "4px", fontSize: "0.75rem", fontWeight: 600, cursor: "pointer" }}>
@@ -408,13 +408,13 @@ export default function ContentPage() {
           {/* BEFORE IMAGE */}
           <div style={{ padding: "1rem", background: "#fcfaf6", border: "1px solid #e8e2d8", borderRadius: "6px" }}>
             <label style={{ display: "block", fontWeight: 700, marginBottom: "0.5rem", color: "#1f1f1f" }}>🌿 Results Section (Before Picture)</label>
-            <div style={{ display: "flex", gap: "0.8rem", alignItems: "center", marginBottom: "0.5rem" }}>
+            <div style={{ display: "flex", gap: "0.8rem", alignItems: "center", marginBottom: "0.5rem", flexWrap: "wrap" }}>
               <img src={siteContent.beforeImage || "/images/before-after/before.webp"} alt="Before" style={{ width: "60px", height: "60px", objectFit: "cover", borderRadius: "4px" }} />
               <input 
                 type="text" 
                 value={siteContent.beforeImage || ""} 
                 onChange={(e) => setSiteContent({ ...siteContent, beforeImage: e.target.value })}
-                style={{ flexGrow: 1, padding: "0.6rem", background: "#fff", border: "1px solid #ddd", fontSize: "0.8rem", color: "#1f1f1f" }} 
+                style={{ flexGrow: 1, minWidth: "150px", padding: "0.6rem", background: "#fff", border: "1px solid #ddd", fontSize: "0.8rem", color: "#1f1f1f" }} 
               />
             </div>
             <label style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem", background: "#111", color: "#fff", padding: "0.4rem 0.8rem", borderRadius: "4px", fontSize: "0.75rem", fontWeight: 600, cursor: "pointer" }}>
@@ -432,15 +432,15 @@ export default function ContentPage() {
           </div>
 
           {/* AFTER IMAGE */}
-          <div style={{ padding: "1rem", background: "#fcfaf6", border: "1px solid #e8e2d8", borderRadius: "6px", gridColumn: "span 2" }}>
+          <div className={styles.fullWidthMobileSpan} style={{ padding: "1rem", background: "#fcfaf6", border: "1px solid #e8e2d8", borderRadius: "6px" }}>
             <label style={{ display: "block", fontWeight: 700, marginBottom: "0.5rem", color: "#1f1f1f" }}>🌿 Results Section (After Picture)</label>
-            <div style={{ display: "flex", gap: "0.8rem", alignItems: "center", marginBottom: "0.5rem" }}>
+            <div style={{ display: "flex", gap: "0.8rem", alignItems: "center", marginBottom: "0.5rem", flexWrap: "wrap" }}>
               <img src={siteContent.afterImage || "/images/before-after/after.webp"} alt="After" style={{ width: "60px", height: "60px", objectFit: "cover", borderRadius: "4px" }} />
               <input 
                 type="text" 
                 value={siteContent.afterImage || ""} 
                 onChange={(e) => setSiteContent({ ...siteContent, afterImage: e.target.value })}
-                style={{ flexGrow: 1, padding: "0.6rem", background: "#fff", border: "1px solid #ddd", fontSize: "0.8rem", color: "#1f1f1f" }} 
+                style={{ flexGrow: 1, minWidth: "150px", padding: "0.6rem", background: "#fff", border: "1px solid #ddd", fontSize: "0.8rem", color: "#1f1f1f" }} 
               />
             </div>
             <label style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem", background: "#111", color: "#fff", padding: "0.4rem 0.8rem", borderRadius: "4px", fontSize: "0.75rem", fontWeight: 600, cursor: "pointer" }}>

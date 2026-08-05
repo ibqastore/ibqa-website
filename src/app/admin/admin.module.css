@@ -203,7 +203,7 @@
   }
   
   .card {
-    padding: 1.2rem;
+    padding: 1rem;
   }
 
   .responsiveInlineGrid {
@@ -223,6 +223,30 @@
   .responsiveInlineGrid input {
     width: 100% !important;
   }
+
+  .bannersGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .fullWidthMobileSpan {
+    grid-column: span 1;
+  }
+
+  .metricsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .metricTitle {
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .metricValue {
+    font-size: 1.8rem;
+  }
 }
 
 @media (min-width: 901px) {
@@ -234,4 +258,33 @@
     display: flex;
     height: 100%;
   }
+}
+
+.bannersGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.fullWidthMobileSpan {
+  grid-column: span 2;
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.metricTitle {
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.metricValue {
+  font-size: 2.5rem;
+  color: var(--accent-gold);
+  line-height: 1;
 }

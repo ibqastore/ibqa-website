@@ -63,7 +63,18 @@ export default function AdminPolicies() {
       </div>
 
       <div className={styles.card}>
-        <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', borderBottom: '1px solid #eee', paddingBottom: '1rem' }}>
+        <div style={{ 
+          display: 'flex', 
+          gap: '1rem', 
+          marginBottom: '1.5rem', 
+          borderBottom: '1px solid #eee', 
+          paddingBottom: '1rem',
+          overflowX: 'auto',
+          WebkitOverflowScrolling: 'touch',
+          whiteSpace: 'nowrap',
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none'
+        }}>
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -76,7 +87,8 @@ export default function AdminPolicies() {
                 borderRadius: '6px',
                 cursor: 'pointer',
                 fontWeight: 600,
-                transition: 'all 0.2s ease'
+                transition: 'all 0.2s ease',
+                flexShrink: 0
               }}
             >
               {tab.label}

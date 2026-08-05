@@ -33,18 +33,18 @@ export default function AdminDashboard() {
         <h1 className={styles.pageTitle}>Dashboard Overview</h1>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '2rem', marginBottom: '3rem' }}>
+      <div className={styles.metricsGrid}>
         <div className={styles.card}>
-          <h3 style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Total Products</h3>
-          <p style={{ fontSize: '2.5rem', color: 'var(--accent-gold)' }}>{products.length}</p>
+          <h3 className={styles.metricTitle}>Total Products</h3>
+          <p className={styles.metricValue}>{products.length}</p>
         </div>
         <div className={styles.card}>
-          <h3 style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Active Discounts</h3>
-          <p style={{ fontSize: '2.5rem', color: 'var(--accent-gold)' }}>{discounts.length}</p>
+          <h3 className={styles.metricTitle}>Active Discounts</h3>
+          <p className={styles.metricValue}>{discounts.length}</p>
         </div>
         <div className={styles.card}>
-          <h3 style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Total Orders</h3>
-          <p style={{ fontSize: '2.5rem', color: 'var(--accent-gold)' }}>{totalOrders !== null ? totalOrders : '...'}</p>
+          <h3 className={styles.metricTitle}>Total Orders</h3>
+          <p className={styles.metricValue}>{totalOrders !== null ? totalOrders : '...'}</p>
         </div>
       </div>
       
