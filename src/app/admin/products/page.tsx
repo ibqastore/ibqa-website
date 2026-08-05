@@ -8,7 +8,7 @@ import styles from "../admin.module.css";
 import RichText from "@/components/RichText";
 
 export default function AdminProducts() {
-  const { products, setProducts } = useStore();
+  const { products, setProducts, showConfirm } = useStore();
   const [isAdding, setIsAdding] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
@@ -101,14 +101,14 @@ export default function AdminProducts() {
   };
 
   const handleDelete = async (id: string) => {
-    if (confirm("Are you sure you want to delete this product?")) {
+    showConfirm("Are you sure you want to delete this product?", async () => {
       const { error } = await supabase.from('products').delete().eq('id', id);
       if (error) {
         alert("Error deleting from database!");
         return;
       }
       setProducts(prev => prev.filter(p => p.id !== id));
-    }
+    });
   };
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {

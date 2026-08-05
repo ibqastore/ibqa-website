@@ -7,38 +7,33 @@ import { Save } from "lucide-react";
 import { createClient } from "@/utils/supabase/client";
 
 export default function AdminPolicies() {
-  const { siteContent, setSiteContent } = useStore();
+  const { siteContent, setSiteContent, showConfirm } = useStore();
   
   // Local state for editing
   const [policies, setPolicies] = useState(siteContent.policies);
   const [activeTab, setActiveTab] = useState<"refund" | "shipping" | "privacy" | "terms">("refund");
-  const [hasWarned, setHasWarned] = useState(false);
 
   const handleEdit = (val: string) => {
-    if (!hasWarned) {
-      if (!confirm("Warning: Changing these policies will directly affect the live website. Do you want to proceed?")) {
-        return;
-      }
-      setHasWarned(true);
-    }
     setPolicies({ ...policies, [activeTab]: val });
   };
 
   const supabase = createClient();
 
   const handleSave = async () => {
-    const newContent = { ...siteContent, policies };
-    
-    const { error } = await supabase.from('site_content').update({ data: newContent }).eq('id', 1);
-    
-    if (error) {
-      alert("Error saving policies to database!");
-      console.error(error);
-      return;
-    }
-    
-    setSiteContent(newContent);
-    alert("Policies saved successfully!");
+    showConfirm("Warning: Changing these policies will directly affect the live website. Do you want to proceed?", async () => {
+      const newContent = { ...siteContent, policies };
+      
+      const { error } = await supabase.from('site_content').update({ data: newContent }).eq('id', 1);
+      
+      if (error) {
+        alert("Error saving policies to database!");
+        console.error(error);
+        return;
+      }
+      
+      setSiteContent(newContent);
+      alert("Policies saved successfully!");
+    });
   };
 
   const tabs = [

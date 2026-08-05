@@ -7,7 +7,7 @@ import { createClient } from "@/utils/supabase/client";
 import styles from "../admin.module.css";
 
 export default function ContentPage() {
-  const { siteContent: dbSiteContent, setSiteContent: originalSetSiteContent } = useStore();
+  const { siteContent: dbSiteContent, setSiteContent: originalSetSiteContent, showConfirm } = useStore();
   const [localContent, setLocalContent] = useState<SiteContent | null>(null);
   const [quickUploadResult, setQuickUploadResult] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -21,22 +21,20 @@ export default function ContentPage() {
   };
 
   const handleSave = async () => {
-    if (!confirm("Are you sure you want to save these changes? This will directly affect the live website.")) {
-      return;
-    }
-    
-    setIsSaving(true);
-    const { error } = await supabase.from('site_content').update({ data: siteContent }).eq('id', 1);
-    setIsSaving(false);
-    
-    if (error) {
-      alert("Error saving changes to database!");
-      console.error(error);
-      return;
-    }
-    
-    originalSetSiteContent(siteContent);
-    alert("Changes saved successfully!");
+    showConfirm("Are you sure you want to save these changes? This will directly affect the live website.", async () => {
+      setIsSaving(true);
+      const { error } = await supabase.from('site_content').update({ data: siteContent }).eq('id', 1);
+      setIsSaving(false);
+      
+      if (error) {
+        alert("Error saving changes to database!");
+        console.error(error);
+        return;
+      }
+      
+      originalSetSiteContent(siteContent);
+      alert("Changes saved successfully!");
+    });
   };
 
   if (!siteContent) {

@@ -6,7 +6,7 @@ import styles from "../admin.module.css";
 import Link from "next/link";
 
 export default function SubscribersPage() {
-  const { subscribers, removeSubscriber } = useStore();
+  const { subscribers, removeSubscriber, showConfirm } = useStore();
 
   return (
     <div className="animate-fade-up">
@@ -45,9 +45,9 @@ export default function SubscribersPage() {
                 <span style={{ fontWeight: 600, color: "#111" }}>{email}</span>
                 <button 
                   onClick={() => {
-                    if (confirm(`Are you sure you want to remove ${email}?`)) {
+                    showConfirm(`Are you sure you want to remove ${email}?`, () => {
                       removeSubscriber(email);
-                    }
+                    });
                   }}
                   style={{ 
                     background: "transparent", 

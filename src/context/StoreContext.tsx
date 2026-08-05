@@ -134,6 +134,8 @@ interface StoreContextType {
   removeSubscriber: (email: string) => void;
   ambassadors: Ambassador[];
   setAmbassadors: React.Dispatch<React.SetStateAction<Ambassador[]>>;
+  showAlert: (message: string, type?: 'success' | 'error' | 'info') => void;
+  showConfirm: (message: string, onConfirm: () => void, onCancel?: () => void) => void;
 }
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
@@ -150,6 +152,40 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [siteContent, setSiteContent] = useState<SiteContent>(defaultSiteContent);
   const [recentlyViewed, setRecentlyViewed] = useState<string[]>([]);
   const [subscribers, setSubscribers] = useState<string[]>([]);
+  
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
+  const [confirmModal, setConfirmModal] = useState<{ message: string; onConfirm: () => void; onCancel?: () => void } | null>(null);
+
+  const showAlert = (message: string, type: 'success' | 'error' | 'info' = 'info') => {
+    setToast({ message, type });
+  };
+
+  const showConfirm = (message: string, onConfirm: () => void, onCancel?: () => void) => {
+    setConfirmModal({ message, onConfirm, onCancel });
+  };
+
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => setToast(null), 3500);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
+
+  // Override global window.alert on client mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.alert = (message: string) => {
+        const msgLower = (message || '').toLowerCase();
+        let type: 'success' | 'error' | 'info' = 'info';
+        if (msgLower.includes('success') || msgLower.includes('confirm') || msgLower.includes('copied') || msgLower.includes('added') || msgLower.includes('placed') || msgLower.includes('saved')) {
+          type = 'success';
+        } else if (msgLower.includes('error') || msgLower.includes('fail') || msgLower.includes('invalid') || msgLower.includes('empty') || msgLower.includes('required')) {
+          type = 'error';
+        }
+        showAlert(message, type);
+      };
+    }
+  }, []);
 
   // Load from Supabase & localStorage on mount
   useEffect(() => {
@@ -348,9 +384,143 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       siteContent, setSiteContent,
       recentlyViewed, addToRecentlyViewed,
       subscribers, addSubscriber, removeSubscriber,
-      ambassadors, setAmbassadors
+      ambassadors, setAmbassadors,
+      showAlert, showConfirm
     }}>
       {children}
+      
+      {/* Toast Notification */}
+      {toast && (
+        <div style={{
+          position: 'fixed',
+          top: '20px',
+          right: '20px',
+          zIndex: 999999,
+          background: '#1f1f1f',
+          color: '#fff',
+          border: '1px solid var(--accent-gold, #D4AF37)',
+          borderRadius: '4px',
+          padding: '1rem 1.5rem',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          fontFamily: 'var(--font-manrope, sans-serif)',
+          fontSize: '0.9rem',
+          minWidth: '280px',
+          maxWidth: '450px',
+          animation: 'slideIn 0.3s ease forwards'
+        }}>
+          <span style={{ fontSize: '1.2rem' }}>
+            {toast.type === 'success' ? '✨' : toast.type === 'error' ? '⚠️' : 'ℹ️'}
+          </span>
+          <span style={{ flexGrow: 1 }}>{toast.message}</span>
+          <button 
+            onClick={() => setToast(null)}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: '#888',
+              cursor: 'pointer',
+              fontSize: '1rem',
+              padding: '0 4px'
+            }}
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
+      {/* Confirm Modal */}
+      {confirmModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: 999998,
+          backgroundColor: 'rgba(0,0,0,0.6)',
+          backdropFilter: 'blur(4px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '1.5rem',
+          fontFamily: 'var(--font-manrope, sans-serif)'
+        }}>
+          <div style={{
+            background: '#fff9e6',
+            color: '#1f1f1f',
+            border: '2px solid var(--accent-gold, #D4AF37)',
+            padding: '2rem',
+            maxWidth: '450px',
+            width: '100%',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.4)',
+            textAlign: 'center',
+            animation: 'scaleIn 0.2s ease forwards'
+          }}>
+            <h3 style={{
+              fontFamily: 'var(--font-cormorant, serif)',
+              fontSize: '1.6rem',
+              marginBottom: '1rem',
+              color: '#000',
+              fontWeight: 'bold'
+            }}>
+              Are you sure?
+            </h3>
+            <p style={{
+              color: '#444',
+              fontSize: '0.95rem',
+              lineHeight: '1.5',
+              marginBottom: '2rem'
+            }}>
+              {confirmModal.message}
+            </p>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              gap: '1rem'
+            }}>
+              <button
+                onClick={() => {
+                  confirmModal.onConfirm();
+                  setConfirmModal(null);
+                }}
+                style={{
+                  background: '#1f1f1f',
+                  color: '#fff',
+                  border: 'none',
+                  padding: '0.8rem 1.8rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  borderRadius: '4px',
+                  fontSize: '0.9rem'
+                }}
+              >
+                Confirm
+              </button>
+              <button
+                onClick={() => {
+                  if (confirmModal.onCancel) confirmModal.onCancel();
+                  setConfirmModal(null);
+                }}
+                style={{
+                  background: 'none',
+                  border: '1px solid #777',
+                  color: '#333',
+                  padding: '0.8rem 1.8rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  borderRadius: '4px',
+                  fontSize: '0.9rem'
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </StoreContext.Provider>
   );
 }
