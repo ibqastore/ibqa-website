@@ -389,7 +389,6 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     }}>
       {children}
       
-      {/* Toast Notification */}
       {toast && (
         <div style={{
           position: 'fixed',
@@ -404,16 +403,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
           boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
           display: 'flex',
           alignItems: 'center',
-          gap: '12px',
+          gap: '8px',
           fontFamily: 'var(--font-manrope, sans-serif)',
           fontSize: '0.9rem',
           minWidth: '280px',
           maxWidth: '450px',
           animation: 'slideIn 0.3s ease forwards'
         }}>
-          <span style={{ fontSize: '1.2rem' }}>
-            {toast.type === 'success' ? '✨' : toast.type === 'error' ? '⚠️' : 'ℹ️'}
-          </span>
           <span style={{ flexGrow: 1 }}>{toast.message}</span>
           <button 
             onClick={() => setToast(null)}
