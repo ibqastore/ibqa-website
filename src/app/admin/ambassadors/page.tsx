@@ -1,11 +1,11 @@
 "use client";
 import { useState } from "react";
 import { Copy, Plus } from "lucide-react";
+import { useStore, Ambassador } from "@/context/StoreContext";
 import styles from "../admin.module.css";
-type Ambassador = { name:string; code:string; commission:number; clicks:number; sales:number; earned:number; active:boolean };
 
 export default function AdminAmbassadors() {
-  const [list, setList] = useState<Ambassador[]>([{ name:"John Doe", code:"AMB-001", commission:15, clicks:124, sales:12, earned:7500, active:true }]);
+  const { ambassadors: list, setAmbassadors: setList } = useStore();
   const [name, setName] = useState(""); const [commission, setCommission] = useState(15); const [selected, setSelected] = useState<Ambassador | null>(null);
   const create = () => { if (!name.trim()) return; const code = `IBQA-${name.replace(/[^a-zA-Z]/g, "").slice(0,6).toUpperCase()}-${Math.floor(100 + Math.random() * 900)}`; setList(x => [...x, { name, code, commission, clicks:0, sales:0, earned:0, active:true }]); setName(""); };
   const copy = async (code:string) => navigator.clipboard.writeText(`${window.location.origin}/?ref=${code}`);

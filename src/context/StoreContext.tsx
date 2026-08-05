@@ -17,6 +17,16 @@ export interface Discount {
   active: boolean;
 }
 
+export interface Ambassador {
+  name: string;
+  code: string;
+  commission: number;
+  clicks: number;
+  sales: number;
+  earned: number;
+  active: boolean;
+}
+
 export interface HeroSlide {
   id: string;
   pc: string;
@@ -59,6 +69,8 @@ export interface SiteContent {
     email: string;
     address: string;
   };
+  discounts?: Discount[];
+  ambassadors?: Ambassador[];
 }
 
 const defaultSiteContent: SiteContent = {
@@ -120,6 +132,8 @@ interface StoreContextType {
   subscribers: string[];
   addSubscriber: (email: string) => void;
   removeSubscriber: (email: string) => void;
+  ambassadors: Ambassador[];
+  setAmbassadors: React.Dispatch<React.SetStateAction<Ambassador[]>>;
 }
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
@@ -127,8 +141,11 @@ const StoreContext = createContext<StoreContextType | undefined>(undefined);
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [products, setProducts] = useState<Product[]>(defaultProducts);
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [discounts, setDiscounts] = useState<Discount[]>([
+  const [discounts, setDiscountsState] = useState<Discount[]>([
     { code: "WELCOME10", percentage: 10, productIds: [], startsAt: "", endsAt: "", active: true }
+  ]);
+  const [ambassadors, setAmbassadorsState] = useState<Ambassador[]>([
+    { name: "John Doe", code: "AMB-001", commission: 15, clicks: 124, sales: 12, earned: 7500, active: true }
   ]);
   const [siteContent, setSiteContent] = useState<SiteContent>(defaultSiteContent);
   const [recentlyViewed, setRecentlyViewed] = useState<string[]>([]);
@@ -164,10 +181,43 @@ export function StoreProvider({ children }: { children: ReactNode }) {
           data.storyImage = "/images/our-story/ibqa-story-v2.webp";
         }
         setSiteContent(data);
+
+        // Load discounts from database if present, otherwise set default
+        if (data.discounts) {
+          setDiscountsState(data.discounts);
+        } else {
+          const defaultDiscounts = [
+            { code: "WELCOME10", percentage: 10, productIds: [], startsAt: "", endsAt: "", active: true }
+          ];
+          setDiscountsState(defaultDiscounts);
+          const updated = { ...data, discounts: defaultDiscounts };
+          await supabase.from('site_content').update({ data: updated }).eq('id', 1);
+        }
+
+        // Load ambassadors from database if present, otherwise set default
+        if (data.ambassadors) {
+          setAmbassadorsState(data.ambassadors);
+        } else {
+          const defaultAmbassadors = [
+            { name: "John Doe", code: "AMB-001", commission: 15, clicks: 124, sales: 12, earned: 7500, active: true }
+          ];
+          setAmbassadorsState(defaultAmbassadors);
+          const updated = { 
+            ...data, 
+            discounts: data.discounts || [
+              { code: "WELCOME10", percentage: 10, productIds: [], startsAt: "", endsAt: "", active: true }
+            ], 
+            ambassadors: defaultAmbassadors 
+          };
+          await supabase.from('site_content').update({ data: updated }).eq('id', 1);
+        }
       } else {
         const savedContent = localStorage.getItem('ibqa_site_content');
         if (savedContent) {
-          setSiteContent(JSON.parse(savedContent));
+          const parsed = JSON.parse(savedContent);
+          setSiteContent(parsed);
+          if (parsed.discounts) setDiscountsState(parsed.discounts);
+          if (parsed.ambassadors) setAmbassadorsState(parsed.ambassadors);
         }
       }
     };
@@ -176,10 +226,12 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
     const savedCart = localStorage.getItem('ibqa_cart');
     const savedDiscounts = localStorage.getItem('ibqa_discounts');
+    const savedAmbassadors = localStorage.getItem('ibqa_ambassadors');
     const savedRecent = localStorage.getItem('ibqa_recently_viewed');
     const savedSubscribers = localStorage.getItem('ibqa_subscribers');
     if (savedCart) setCart(JSON.parse(savedCart));
-    if (savedDiscounts) setDiscounts(JSON.parse(savedDiscounts));
+    if (savedDiscounts) setDiscountsState(JSON.parse(savedDiscounts));
+    if (savedAmbassadors) setAmbassadorsState(JSON.parse(savedAmbassadors));
 
     if (savedRecent) setRecentlyViewed(JSON.parse(savedRecent));
     if (savedSubscribers) setSubscribers(JSON.parse(savedSubscribers));
@@ -198,6 +250,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('ibqa_discounts', JSON.stringify(discounts));
   }, [discounts]);
 
+  useEffect(() => {
+    localStorage.setItem('ibqa_ambassadors', JSON.stringify(ambassadors));
+  }, [ambassadors]);
+
   useEffect(() => { localStorage.setItem('ibqa_site_content', JSON.stringify(siteContent)); }, [siteContent]);
 
   useEffect(() => {
@@ -207,6 +263,40 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     localStorage.setItem('ibqa_subscribers', JSON.stringify(subscribers));
   }, [subscribers]);
+
+  const setDiscounts: React.Dispatch<React.SetStateAction<Discount[]>> = (value) => {
+    setDiscountsState(prev => {
+      const next = typeof value === 'function' ? (value as Function)(prev) : value;
+      
+      const supabase = createClient();
+      setSiteContent(prevContent => {
+        const updated = { ...prevContent, discounts: next };
+        supabase.from('site_content').update({ data: updated }).eq('id', 1).then(({ error }) => {
+          if (error) console.error("Error saving discounts to Supabase:", error);
+        });
+        return updated;
+      });
+
+      return next;
+    });
+  };
+
+  const setAmbassadors: React.Dispatch<React.SetStateAction<Ambassador[]>> = (value) => {
+    setAmbassadorsState(prev => {
+      const next = typeof value === 'function' ? (value as Function)(prev) : value;
+      
+      const supabase = createClient();
+      setSiteContent(prevContent => {
+        const updated = { ...prevContent, ambassadors: next };
+        supabase.from('site_content').update({ data: updated }).eq('id', 1).then(({ error }) => {
+          if (error) console.error("Error saving ambassadors to Supabase:", error);
+        });
+        return updated;
+      });
+
+      return next;
+    });
+  };
 
   const addToCart = (product: Product) => {
     setCart(prev => {
@@ -257,7 +347,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       discounts, setDiscounts,
       siteContent, setSiteContent,
       recentlyViewed, addToRecentlyViewed,
-      subscribers, addSubscriber, removeSubscriber
+      subscribers, addSubscriber, removeSubscriber,
+      ambassadors, setAmbassadors
     }}>
       {children}
     </StoreContext.Provider>
