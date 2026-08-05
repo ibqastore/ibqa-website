@@ -34,18 +34,18 @@ export default function AdminDashboard() {
       </div>
 
       <div className={styles.metricsGrid}>
-        <div className={styles.card}>
+        <Link href="/admin/products" className={`${styles.card} ${styles.clickableCard}`} style={{ textDecoration: 'none' }}>
           <h3 className={styles.metricTitle}>Total Products</h3>
           <p className={styles.metricValue}>{products.length}</p>
-        </div>
-        <div className={styles.card}>
+        </Link>
+        <Link href="/admin/discounts" className={`${styles.card} ${styles.clickableCard}`} style={{ textDecoration: 'none' }}>
           <h3 className={styles.metricTitle}>Active Discounts</h3>
           <p className={styles.metricValue}>{discounts.length}</p>
-        </div>
-        <div className={styles.card}>
+        </Link>
+        <Link href="/admin/orders" className={`${styles.card} ${styles.clickableCard}`} style={{ textDecoration: 'none' }}>
           <h3 className={styles.metricTitle}>Total Orders</h3>
           <p className={styles.metricValue}>{totalOrders !== null ? totalOrders : '...'}</p>
-        </div>
+        </Link>
       </div>
       
       <div className={styles.card}>
