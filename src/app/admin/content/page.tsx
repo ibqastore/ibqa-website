@@ -1,36 +1,47 @@
 "use client";
 
 import { useState } from "react";
-import { useStore, HeroSlide } from "@/context/StoreContext";
+import { useStore, HeroSlide, SiteContent } from "@/context/StoreContext";
 import { Upload, Image as ImageIcon, Leaf, Plus, Trash2 } from "lucide-react";
 import { createClient } from "@/utils/supabase/client";
 import styles from "../admin.module.css";
 
 export default function ContentPage() {
-  const { siteContent, setSiteContent: originalSetSiteContent } = useStore();
+  const { siteContent: dbSiteContent, setSiteContent: originalSetSiteContent } = useStore();
+  const [localContent, setLocalContent] = useState<SiteContent | null>(null);
   const [quickUploadResult, setQuickUploadResult] = useState<string | null>(null);
-  const [hasWarned, setHasWarned] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const supabase = createClient();
 
-  const setSiteContent = async (newContent: any) => {
-    if (!hasWarned) {
-      if (!confirm("Warning: Changing this content will directly affect the live website. Do you want to proceed?")) {
-        return;
-      }
-      setHasWarned(true);
+  const siteContent = localContent || dbSiteContent;
+
+  const setSiteContent = (newContent: any) => {
+    setLocalContent(newContent);
+  };
+
+  const handleSave = async () => {
+    if (!confirm("Are you sure you want to save these changes? This will directly affect the live website.")) {
+      return;
     }
     
-    const { error } = await supabase.from('site_content').update({ data: newContent }).eq('id', 1);
+    setIsSaving(true);
+    const { error } = await supabase.from('site_content').update({ data: siteContent }).eq('id', 1);
+    setIsSaving(false);
     
     if (error) {
-      alert("Error saving to database!");
+      alert("Error saving changes to database!");
       console.error(error);
       return;
     }
     
-    originalSetSiteContent(newContent);
+    originalSetSiteContent(siteContent);
+    alert("Changes saved successfully!");
   };
+
+  if (!siteContent) {
+    return <div style={{ padding: "3rem", textAlign: "center", color: "var(--text-secondary)" }}>Loading website content data...</div>;
+  }
 
   const handleFileUpload = async (file: File, callback: (dataUrl: string) => void) => {
     if (!file.type.startsWith("image/")) return alert("Please select a valid image file.");
@@ -103,19 +114,20 @@ export default function ContentPage() {
             </p>
           </div>
           <button 
-            onClick={() => alert("Changes saved successfully!")}
+            onClick={handleSave}
+            disabled={isSaving}
             style={{ 
-              background: "var(--accent-gold)", 
+              background: isSaving ? "#ccc" : "var(--accent-gold)", 
               color: "#000", 
               padding: "0.8rem 1.5rem", 
               borderRadius: "4px", 
               fontWeight: 700, 
               border: "none", 
-              cursor: "pointer",
+              cursor: isSaving ? "not-allowed" : "pointer",
               boxShadow: "0 4px 12px rgba(212,175,55,0.3)"
             }}
           >
-            Save Changes
+            {isSaving ? "Saving..." : "Save Changes"}
           </button>
         </div>
       </div>
