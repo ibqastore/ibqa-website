@@ -60,7 +60,7 @@ export default function AdminOrders() {
     const rows = filteredOrders.map(order => {
       const c = order.customer_info || {};
       return [
-        order.id,
+        order.order_id_readable || order.id,
         `"${new Date(order.created_at).toLocaleString()}"`,
         `"${c.firstName || ''}"`,
         `"${c.lastName || ''}"`,
@@ -155,7 +155,7 @@ export default function AdminOrders() {
                     
                     return (
                       <tr key={order.id}>
-                        <td style={{ fontWeight: 600 }}>#{order.id}</td>
+                        <td style={{ fontWeight: 600 }}>#{order.order_id_readable || order.id}</td>
                         <td>{customer.firstName} {customer.lastName}</td>
                         <td>
                           <a 

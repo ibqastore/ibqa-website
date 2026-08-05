@@ -27,6 +27,7 @@ export default function Checkout() {
   const [paymentMethod, setPaymentMethod] = useState("cod");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [readableOrderId, setReadableOrderId] = useState("");
 
   const supabase = createClient();
 
@@ -91,6 +92,13 @@ export default function Checkout() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const generateReadableOrderId = () => {
+    const date = new Date();
+    const yearMonth = `${date.getFullYear().toString().slice(-2)}${String(date.getMonth() + 1).padStart(2, '0')}`;
+    const randomChars = Math.random().toString(36).substring(2, 6).toUpperCase();
+    return `IBQA-${yearMonth}-${randomChars}`;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setHasSubmitted(true);
@@ -107,6 +115,7 @@ export default function Checkout() {
     }
 
     setIsSubmitting(true);
+    const customId = generateReadableOrderId();
     
     // Save to database
     const { data, error } = await supabase.from('orders').insert([
@@ -118,7 +127,8 @@ export default function Checkout() {
         shipping: shipping,
         total: total,
         payment_method: paymentMethod,
-        status: 'pending'
+        status: 'pending',
+        order_id_readable: customId
       }
     ]);
 
@@ -130,6 +140,7 @@ export default function Checkout() {
       return;
     }
 
+    setReadableOrderId(customId);
     clearCart();
     setOrderPlaced(true);
   };
@@ -138,9 +149,14 @@ export default function Checkout() {
     return (
       <div style={{ textAlign: 'center', padding: '150px 20px', minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
         <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem', color: 'var(--brand-primary)' }}>Order Confirmed! 🎉</h2>
-        <p style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', marginBottom: '2.5rem', maxWidth: '500px', lineHeight: '1.6' }}>
+        <p style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', marginBottom: '1.5rem', maxWidth: '500px', lineHeight: '1.6' }}>
           Thank you for your purchase, {formData.firstName}. Your order has been placed successfully and will be shipped to {formData.city} soon.
         </p>
+        {readableOrderId && (
+          <p style={{ fontSize: '1.2rem', marginBottom: '2.5rem', color: '#111', fontWeight: 600 }}>
+            Order ID: <span style={{ fontFamily: 'monospace', background: '#FFFDF5', padding: '6px 12px', borderRadius: '6px', border: '1px solid var(--accent-gold)' }}>{readableOrderId}</span>
+          </p>
+        )}
         <button onClick={() => router.push('/')} className={styles.submitBtn} style={{ maxWidth: '300px' }}>Return to Shop</button>
       </div>
     );
