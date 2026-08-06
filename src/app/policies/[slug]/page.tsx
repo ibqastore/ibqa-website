@@ -1,17 +1,19 @@
 "use client";
 
+import { use } from "react";
 import { useStore } from "@/context/StoreContext";
 import { notFound } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import RichText from "@/components/RichText";
 
-export default function PolicyPage({ params }: { params: { slug: string } }) {
+export default function PolicyPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = use(params);
   const { siteContent } = useStore();
   
   const validPolicies = ["refund", "shipping", "privacy", "terms"];
   
-  if (!validPolicies.includes(params.slug)) {
+  if (!validPolicies.includes(slug)) {
     return notFound();
   }
 
@@ -22,8 +24,8 @@ export default function PolicyPage({ params }: { params: { slug: string } }) {
     terms: "Terms of Service"
   };
 
-  const title = titleMap[params.slug];
-  const content = siteContent.policies[params.slug as keyof typeof siteContent.policies];
+  const title = titleMap[slug];
+  const content = siteContent.policies[slug as keyof typeof siteContent.policies];
 
   return (
     <div style={{ backgroundColor: '#fff', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
