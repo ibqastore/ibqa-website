@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Manrope } from "next/font/google";
 import "./globals.css";
+import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -57,6 +59,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* Google Analytics (gtag.js) */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-TWFMYZM35E"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-TWFMYZM35E');
+          `}
+        </Script>
+      </head>
       <body className={`${manrope.variable} ${cormorant.variable}`}>
         <StoreProvider>
           <ClientLayout>
@@ -82,6 +99,7 @@ export default function RootLayout({
               }}
             />
             {children}
+            <Analytics />
           </ClientLayout>
         </StoreProvider>
       </body>
