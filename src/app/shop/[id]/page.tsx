@@ -20,6 +20,9 @@ export async function generateMetadata(
   return {
     title: `${product.name} | IBQA Skincare`,
     description: product.description.replace(/\[badge:.*?\]/g, '').trim().substring(0, 160),
+    alternates: {
+      canonical: `/shop/${product.id}`,
+    },
     openGraph: {
       title: product.name,
       description: product.description.replace(/\[badge:.*?\]/g, '').trim().substring(0, 160),

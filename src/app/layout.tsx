@@ -27,6 +27,9 @@ export const metadata: Metadata = {
   icons: {
     icon: '/images/logo/logo-main.webp',
   },
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     title: "IBQA Skincare | Premium Luxury Skincare",
     description: "Reveal Your Natural Glow. Premium skincare made for healthier, radiant skin.",
